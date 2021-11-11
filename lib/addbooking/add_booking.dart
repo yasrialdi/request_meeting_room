@@ -1,0 +1,353 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:date_format/date_format.dart';
+import 'package:intl/intl.dart';
+import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
+import 'package:request_meeting_room/home/home.dart';
+
+import 'RepositoryAdd.dart';
+
+class PageAddBooking extends StatefulWidget {
+  const PageAddBooking({Key? key}) : super(key: key);
+
+  @override
+  _PageAddBookingState createState() => _PageAddBookingState();
+}
+
+class _PageAddBookingState extends State<PageAddBooking> {
+  String dropdownRuang = 'Ruang Meeting 1';
+  DateTime selectedDate1 = DateTime.now();
+  DateTime selectedDate2 = DateTime.now();
+
+  DateFormat formatter = DateFormat('yyyy-MM-dd');
+
+
+  late String _hour1, _minute1, _time1;
+  late String _hour2, _minute2, _time2;
+
+  TimeOfDay selectedTime1 = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
+
+  RepositoryAdd repository = RepositoryAdd();
+  final _judulController = TextEditingController();
+  final _jumlahpesertaController = TextEditingController();
+  final _catatanController = TextEditingController();
+
+
+  TextEditingController _dateController1 = TextEditingController();
+  TextEditingController _timeController1 = TextEditingController();
+  TextEditingController _dateController2 = TextEditingController();
+  TextEditingController _timeController2 = TextEditingController();
+
+  Future<Null> _selectDate1(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate1,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked != null)
+      setState(() {
+        selectedDate1 = picked;
+        _dateController1.text = formatter.format(selectedDate1);
+      });
+  }
+
+  Future<Null> _selectDate2(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate2,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked != null)
+      setState(() {
+        selectedDate2 = picked;
+        _dateController2.text = formatter.format(selectedDate2);
+      });
+  }
+
+  Future<Null> _selectTime1(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime1,
+    );
+    if (picked != null)
+      setState(() {
+        selectedTime1 = picked;
+        _hour1 = selectedTime1.hour.toString();
+        _minute1 = selectedTime1.minute.toString();
+        _time1 = _hour1 + ' : ' + _minute1;
+        _timeController1.text = _time1;
+        _timeController1.text = formatDate(
+            DateTime(2019, 08, 1, selectedTime1.hour, selectedTime1.minute),
+            [hh, ':', nn, ':', ss]).toString();
+      });
+  }
+
+  Future<Null> _selectTime2(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime2,
+    );
+    if (picked != null)
+      setState(() {
+        selectedTime2 = picked;
+        _hour2 = selectedTime2.hour.toString();
+        _minute2 = selectedTime2.minute.toString();
+        _time2 = _hour2 + ' : ' + _minute2;
+        _timeController2.text = _time2;
+        _timeController2.text = formatDate(
+            DateTime(2019, 08, 1, selectedTime2.hour, selectedTime2.minute),
+            [hh, ':', nn, ':', ss]).toString();
+      });
+  }
+
+  void postBook() async{
+    bool response = await repository.postDataAdd(
+        _judulController.text,
+        dropdownRuang,
+        _dateController1.text +" "+ _timeController1.text,
+        _dateController2.text +" "+ _timeController2.text,
+        _jumlahpesertaController.text,
+        _catatanController.text);
+  }
+
+  @override
+  void initState() {
+    _dateController1.text = DateFormat.yMd().format(DateTime.now());
+    _dateController2.text = DateFormat.yMd().format(DateTime.now());
+
+    _timeController1.text = formatDate(
+        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
+        [hh, ':', nn, " ", am]).toString();
+
+    _timeController2.text = formatDate(
+        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
+        [hh, ':', nn, " ", am]).toString();
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.close_rounded)),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: TextField(
+                controller: _judulController,
+                style: TextStyle(fontSize: 25),
+                decoration: InputDecoration(
+                  hintText: "Judul Meeting",
+                  hintStyle: TextStyle(fontFamily: "Cambria"),
+                ),
+              ),
+            ),
+            SizedBox(height: 25),
+            Padding(
+              padding: const EdgeInsets.only(),
+              child: Divider(
+                color: Colors.black.withOpacity(0.1),
+                thickness: 1,
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: dropdownRuang,
+                icon: const Icon(Icons.arrow_drop_down_rounded),
+                iconSize: 50,
+                elevation: 16,
+                style: const TextStyle(
+                    fontSize: 23, color: Colors.black, fontFamily: "cambria"),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownRuang = newValue!;
+                  });
+                },
+                items: <String>['Ruang Meeting 1', 'Ruang Meeting 2', 'Ruang Meeting 1 & 2']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.only(),
+              child: Divider(
+                color: Colors.black.withOpacity(0.1),
+                thickness: 1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.calendar_today),
+                  TextButton(
+                    onPressed: () {
+                      _selectDate1(context);
+                    },
+                    child: Text("Start Meeting ${selectedDate1.day} - ${selectedDate1.month} - ${selectedDate1.year} "),
+
+                  ),
+                  SizedBox(width: 65),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          _selectTime1(context);
+                        },
+                        child: Text(
+                            "${selectedTime1.hour}:${selectedTime1.minute}"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.calendar_today),
+                  TextButton(
+                    onPressed: () {
+                      _selectDate2(context);
+                    },
+                    child: Text("End Meeeting ${selectedDate2.day} - ${selectedDate2.month} - ${selectedDate2.year}"),
+                  ),
+                  SizedBox(width: 67),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          _selectTime2(context);
+                        },
+                        child: Text(
+                            "${selectedTime2.hour}:${selectedTime2.minute}"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(),
+              child: Divider(
+                color: Colors.black.withOpacity(0.1),
+                thickness: 1,
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 40),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.person),
+                  Text("Jumlah Peserta"),
+                  SizedBox(width: 170),
+                  Expanded(
+                    child: TextField(
+                      controller: _jumlahpesertaController,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: "1-50",
+                        hintStyle: TextStyle(fontFamily: "Cambria"),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(),
+              child: Divider(
+                color: Colors.black.withOpacity(0.1),
+                thickness: 1,
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.note_rounded),
+                  Text("Catatan"),
+
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(45, 0, 40, 0),
+              child: TextField(
+                controller: _catatanController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  contentPadding:
+                  EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                ),
+              ),
+            ),
+            SizedBox(height: 50),
+
+            ElevatedButton(
+              style: ButtonStyle(),
+              onPressed: ()  {
+                postBook();
+                Navigator.of(context).pop();
+                setState(() {
+
+                });
+
+              },
+              child: Text(
+                'SIMPAN',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Ubuntu',
+                    color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
