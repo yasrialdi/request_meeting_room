@@ -52,15 +52,15 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: FutureBuilder(
-          future: _getDataSource(),
-          builder: (context, snapshot){
-            return SfCalendar(
-              view: CalendarView.week,
-              dataSource: MeetingDataSource(_getDataSource()),
-              monthViewSettings: MonthViewSettings(
-                  appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-            );
-          }
+            future: _getDataSource(),
+            builder: (context, snapshot){
+              return SfCalendar(
+                view: CalendarView.week,
+                dataSource: MeetingDataSource(_getDataSource()),
+                monthViewSettings: MonthViewSettings(
+                    appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+              );
+            }
         ),
       ),
     );
