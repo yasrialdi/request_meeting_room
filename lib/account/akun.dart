@@ -1,13 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:request_meeting_room/home/model_home.dart';
 import 'package:request_meeting_room/home/repository_home.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-
-void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
@@ -16,33 +10,23 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  List<DataHome> listHome = [];
   RepositoryHome repository = RepositoryHome();
 
+  Future<List<Meeting>> _getDataSource() async {
+    List<DataHome> listHome = await repository.getDataHome();
+    List<Meeting> meetings = [];
 
-  getDataHome() async {
-    listHome = await repository.getDataHome();
-    setState(() {});
-  }
+    for (DataHome item in listHome) {
+      DateTime startTime = item.mulaiDateTime;
+      DateTime endTime = item.selesaiDateTime;
 
-  _getDataSource() async {
-    List<DataHome> listHome = (await http.get(Uri.parse
-      ('https://empkp.000webhostapp.com/datagetnew.php'))) as List<DataHome>;
-    final List<Meeting> meetings = <Meeting>[];
-
-    for(DataHome item in listHome) {
-      final DateTime startTime = item.mulai as DateTime;
-      final DateTime endTime = item.selesai as DateTime;
-      meetings.add(Meeting("Conference", startTime, endTime, Color(0xFF0F8644), false));
+      meetings.add(
+        // Meeting("Conference", startTime, endTime, Color(0xFF0F8644), false),
+        Meeting(item.judul, startTime, endTime, Color(0xFF0F8644), false),
+      );
     }
-    return meetings;
-  }
 
-  @override
-  void initState() {
-    getDataHome();
-    super.initState();
+    return meetings;
   }
 
   @override
@@ -51,26 +35,30 @@ class _MyAppState extends State<MyApp> {
       title: 'Calendar Getting Started',
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: FutureBuilder(
-            future: _getDataSource(),
-            builder: (context, snapshot){
+        body: FutureBuilder<List<Meeting>>(
+          future: _getDataSource(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
               return SfCalendar(
                 view: CalendarView.week,
-                dataSource: MeetingDataSource(_getDataSource()),
+                dataSource: MeetingDataSource(snapshot.data!),
                 monthViewSettings: MonthViewSettings(
-                    appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+                  appointmentDisplayMode:
+                      MonthAppointmentDisplayMode.appointment,
+                ),
               );
             }
+
+            return Center(child: CircularProgressIndicator());
+          },
         ),
       ),
     );
   }
-
-
 }
 
 class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Meeting> source){
+  MeetingDataSource(List<Meeting> source) {
     appointments = source;
   }
 
