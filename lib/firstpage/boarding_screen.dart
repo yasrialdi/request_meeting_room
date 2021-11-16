@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:request_meeting_room/main.dart';
+import 'package:request_meeting_room/firstpage/main.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:request_meeting_room/home/home.dart';
 // import 'package:introduction_screen/introduction_screen.dart';

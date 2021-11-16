@@ -129,6 +129,50 @@ class _PageAddBookingState extends State<PageAddBooking> {
   }
 
 
+  _showAlertDialogAdd() {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.of(context).pop(PageNavBottomBar());
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continue"),
+      onPressed:  () async {
+        postBook();
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (_) => PageNavBottomBar()));
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Cek Kembali"),
+      content: Text(
+          "Judul Meeting" "  : " "${_judulController.text}\n"
+              "Ruang Meeting" "  : " "$dropdownRuang\n"
+              "Mulai Meeting" " : " "${_dateController1.text} " " ${_timeController1.text}\n"
+              "Selesai Meeting" "  : " "${_dateController2.text} " " ${_timeController2.text}\n"
+              "Jumlah Peserta Meeting" "  : " "${_jumlahpesertaController.text}\n"
+              "Catatan Meeting" "  : " "${_catatanController.text}\n"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -329,11 +373,7 @@ class _PageAddBookingState extends State<PageAddBooking> {
             ElevatedButton(
               style: ButtonStyle(),
               onPressed: ()  {
-                postBook();
-                Navigator.of(context).pop();
-                setState(() {
-
-                });
+                _showAlertDialogAdd();
 
               },
               child: Text(

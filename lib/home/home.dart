@@ -21,10 +21,35 @@ class _PageHomeState extends State<PageHome> {
   DateFormat formatter = DateFormat('dd-MM-yyyy');
   DateFormat formatHome = DateFormat('dd-MM-yyyy HH:mm');
 
+
+
   getDataHome() async {
     listHome = await repository.getDataHome();
     setState(() {});
   }
+
+  Future<List<Meeting>> _getDataSource() async {
+    List<DataHome> listHome = await repository.getDataHome();
+    List<Meeting> meetings = [];
+
+    for (DataHome item in listHome) {
+      DateTime startTime = item.mulaiDateTime;
+      DateTime endTime = item.selesaiDateTime;
+
+      meetings.add(
+        // Meeting("Conference", startTime, endTime, Color(0xFF0F8644), false),
+        Meeting(item.judul, item.ruang, startTime, endTime, Color(0xFF0F8644), false),
+      );
+
+
+    }
+
+    return meetings;
+
+
+  }
+
+
 
   void _showDialogBooking(DataHome dataHome) {
     showDialog(
@@ -87,15 +112,29 @@ class _PageHomeState extends State<PageHome> {
       ),
       body: SingleChildScrollView(
         child: Container(
+
           child: Column(children: [
             SizedBox(height: 20),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: SfCalendar(
-                view: CalendarView.month,
-                monthViewSettings: MonthViewSettings(
-                    appointmentDisplayMode:
-                        MonthAppointmentDisplayMode.appointment),
+              child: FutureBuilder<List<Meeting>>(
+                future: _getDataSource(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return SfCalendar(
+                      view: CalendarView.month,
+                      dataSource: MeetingDataSource(snapshot.data!),
+                      onTap: (details){
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (context) => LongPress());
+                      },
+
+                    );
+                  }
+
+                  return Center(child: CircularProgressIndicator());
+                },
               ),
             ),
             SizedBox(height: 15),
@@ -223,5 +262,131 @@ class _PageHomeState extends State<PageHome> {
         ),
       ),
     );
+  }
+}
+
+
+class MeetingDataSource extends CalendarDataSource {
+  MeetingDataSource(List<Meeting> source) {
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    return appointments![index].from;
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    return appointments![index].to;
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments![index].eventName;
+  }
+
+  @override
+  Color getColor(int index) {
+    return appointments![index].background;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    return appointments![index].isAllDay;
+  }
+}
+
+class Meeting {
+  Meeting(this.eventName, this.ruang, this.from, this.to, this.background, this.isAllDay);
+
+  String eventName;
+  String ruang;
+  DateTime from;
+  DateTime to;
+  Color background;
+  bool isAllDay;
+
+}
+
+class Detail {
+  Detail(this.eventName, this.ruang, this.from, this.to, this.background, this.isAllDay);
+
+  String eventName;
+  String ruang;
+  DateTime from;
+  DateTime to;
+  Color background;
+  bool isAllDay;
+
+}
+
+
+class LongPress extends StatefulWidget {
+  const LongPress({Key? key}) : super(key: key);
+
+  @override
+  _LongPressState createState() => _LongPressState();
+}
+
+class _LongPressState extends State<LongPress> {
+
+  List<DataHome> listHome = [];
+  RepositoryHome repository = RepositoryHome();
+
+
+
+  DateFormat formatter = DateFormat('dd-MM-yyyy');
+  DateFormat formatHome = DateFormat('dd-MM-yyyy HH:mm');
+
+  getDataHome() async {
+    listHome = await repository.getDataHome();
+    setState(() {});
+  }
+
+  Future<List<Meeting>> _getDataSelect() async {
+    List<DataHome> listHome = await repository.getDataHome();
+    List<Meeting> meetings = [];
+
+
+    for (DataHome item in listHome) {
+      DateTime startTime = item.mulaiDateTime;
+      DateTime endTime = item.selesaiDateTime;
+
+
+      meetings.add(
+        // Meeting("Conference", startTime, endTime, Color(0xFF0F8644), false),
+        Meeting(item.judul, item.ruang, startTime, endTime, Color(0xFF0F8644), false),
+      );
+    }
+    return meetings;
+
+    _getDataSelect() => meetings;
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+
+
+    return FutureBuilder<List<Meeting>>(
+      future: _getDataSelect(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return SfCalendar(
+            view: CalendarView.timelineDay,
+            dataSource: MeetingDataSource(snapshot.data!),
+            monthViewSettings: MonthViewSettings(
+              appointmentDisplayMode:
+              MonthAppointmentDisplayMode.appointment,
+            ),
+          );
+        }
+
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
   }
 }
