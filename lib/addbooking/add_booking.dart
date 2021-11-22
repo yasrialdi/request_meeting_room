@@ -15,7 +15,7 @@ class PageAddBooking extends StatefulWidget {
 }
 
 class _PageAddBookingState extends State<PageAddBooking> {
-  String dropdownRuang = 'Ruang Meeting 1';
+  String dropdownRuang = '1';
   DateTime selectedDate1 = DateTime.now();
   DateTime selectedDate2 = DateTime.now();
 
@@ -120,11 +120,11 @@ class _PageAddBookingState extends State<PageAddBooking> {
 
     _timeController1.text = formatDate(
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
-        [hh, ':', nn, " ", am]).toString();
+        [HH, ':', nn]).toString();
 
     _timeController2.text = formatDate(
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
-        [hh, ':', nn, " ", am]).toString();
+        [HH, ':', nn]).toString();
     super.initState();
   }
 
@@ -142,7 +142,7 @@ class _PageAddBookingState extends State<PageAddBooking> {
       child: Text("Continue"),
       onPressed:  () async {
         postBook();
-        Navigator.pushReplacement(context,
+        Navigator.push(context,
             MaterialPageRoute(builder: (_) => PageNavBottomBar()));
       },
     );
@@ -215,26 +215,43 @@ class _PageAddBookingState extends State<PageAddBooking> {
             SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: DropdownButton<String>(
-                isExpanded: true,
-                value: dropdownRuang,
-                icon: const Icon(Icons.arrow_drop_down_rounded),
-                iconSize: 50,
-                elevation: 16,
-                style: const TextStyle(
-                    fontSize: 23, color: Colors.black, fontFamily: "cambria"),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropdownRuang = newValue!;
-                  });
-                },
-                items: <String>['Ruang Meeting 1', 'Ruang Meeting 2', 'Ruang Meeting 1 & 2']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              child: Row(
+                children: [
+                  Icon(Icons.room),
+                  SizedBox(width: 5),
+                  Text("Ruang Meeting",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: "Ubuntu"
+                    ),),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: dropdownRuang,
+                        icon: const Icon(Icons.arrow_drop_down_rounded),
+                        iconSize: 50,
+                        elevation: 16,
+                        style: const TextStyle(
+                            fontSize: 23, color: Colors.black, fontFamily: "cambria"),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownRuang = newValue!;
+                          });
+                        },
+                        hint: Text("Pilih Ruang Meeting"),
+                        items: <String>['1', '2', '3']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 15),
@@ -255,9 +272,10 @@ class _PageAddBookingState extends State<PageAddBooking> {
                     onPressed: () {
                       _selectDate1(context);
                     },
-                    child: Text("Start Meeting ${selectedDate1.day} - ${selectedDate1.month} - ${selectedDate1.year} "),
-
-                  ),
+                    child: Text("Start Meeting ${selectedDate1.day} - ${selectedDate1.month} - ${selectedDate1.year} ",
+                      style: TextStyle(
+                          fontFamily: "Ubuntu"
+                      ),),),
                   SizedBox(width: 65),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -317,8 +335,13 @@ class _PageAddBookingState extends State<PageAddBooking> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Icon(Icons.person),
-                  Text("Jumlah Peserta"),
-                  SizedBox(width: 170),
+                  SizedBox(width: 5),
+                  Text("Jumlah Peserta",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: "Ubuntu"
+                    ),),
+                  SizedBox(width: 120),
                   Expanded(
                     child: TextField(
                       controller: _jumlahpesertaController,
@@ -327,7 +350,7 @@ class _PageAddBookingState extends State<PageAddBooking> {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         hintText: "1-50",
-                        hintStyle: TextStyle(fontFamily: "Cambria"),
+                        hintStyle: TextStyle(fontFamily: "Ubuntu"),
                       ),
                     ),
                   ),
@@ -349,7 +372,13 @@ class _PageAddBookingState extends State<PageAddBooking> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Icon(Icons.note_rounded),
-                  Text("Catatan"),
+                  SizedBox(width: 5),
+                  Text("Catatan",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: "Ubuntu"
+                    ),),
+              SizedBox(width: 50),
 
                 ],
               ),

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:request_meeting_room/model/model_info_room.dart';
 
 class RepositoryAdd {
-  final AddUrl = 'https://empkp.000webhostapp.com/adddatabooking.php';
+  final AddUrl = 'https://empkp.000webhostapp.com/adddatabooking1lagi.php';
 
   Future postDataAdd(
       String judul, String ruangan, String mulai, String selesai, String jumlah, String catatan) async {
