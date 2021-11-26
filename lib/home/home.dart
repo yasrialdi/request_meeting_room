@@ -21,16 +21,19 @@ class _PageHomeState extends State<PageHome> {
   DateFormat formatter = DateFormat('dd-MM-yyyy');
   DateFormat formatHome = DateFormat('dd-MM-yyyy HH:mm');
 
-
-
   getDataHome() async {
     listHome = await repository.getDataHome();
     setState(() {});
   }
 
-  Future<List<Meeting>> _getDataSource() async {
+  DateTime _selectDate = DateTime.now();
+
+  Future<List<Meeting>> _getDataSource()  async {
     List<DataHome> listHome = await repository.getDataHome();
     List<Meeting> meetings = [];
+
+
+
 
     for (DataHome item in listHome) {
       DateTime startTime = item.mulaiDateTime;
@@ -40,15 +43,10 @@ class _PageHomeState extends State<PageHome> {
         // Meeting("Conference", startTime, endTime, Color(0xFF0F8644), false),
         Meeting(item.judul, item.ruang, startTime, endTime, Color(0xFF0F8644), false),
       );
-
-
     }
-
     return meetings;
 
-
   }
-
 
 
   void _showDialogBooking(DataHome dataHome) {
@@ -84,6 +82,42 @@ class _PageHomeState extends State<PageHome> {
         ],
       );
     },
+    );
+  }
+
+  void _showDialogCalendar(DataHome dataHome) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("Detail Booking"),
+          content: SingleChildScrollView(
+            child: Container(
+              width: 150,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                      "Judul Meeting" " : " "${dataHome.judul}\n"
+                          "Ruang Meeting" " : " "${dataHome.ruang}\n"
+                          "Mulai Meeting" " : " "${dataHome.mulai} WIB\n"
+                          "Selesai Meeting" " : " "${dataHome.selesai} WIB\n"
+                          "Jumlah Peserta Meeting" " : ""${dataHome.jml_peserta}\n"
+                          "Catatan Meeting" " : " "${dataHome.catatan}\n")
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -124,10 +158,13 @@ class _PageHomeState extends State<PageHome> {
                     return SfCalendar(
                       view: CalendarView.month,
                       dataSource: MeetingDataSource(snapshot.data!),
+                      initialSelectedDate: DateTime.now(),
+
                       onTap: (details){
                         showModalBottomSheet(
                             context: context,
                             builder: (context) => LongPress());
+
                       },
 
                     );
@@ -334,10 +371,9 @@ class _LongPressState extends State<LongPress> {
   List<DataHome> listHome = [];
   RepositoryHome repository = RepositoryHome();
 
+  List<Meeting>get selectedDate => meetings;
 
-
-  DateFormat formatter = DateFormat('dd-MM-yyyy');
-  DateFormat formatHome = DateFormat('dd-MM-yyyy HH:mm');
+  get meetings => _getDataSelect();
 
   getDataHome() async {
     listHome = await repository.getDataHome();
@@ -348,11 +384,9 @@ class _LongPressState extends State<LongPress> {
     List<DataHome> listHome = await repository.getDataHome();
     List<Meeting> meetings = [];
 
-
     for (DataHome item in listHome) {
       DateTime startTime = item.mulaiDateTime;
       DateTime endTime = item.selesaiDateTime;
-
 
       meetings.add(
         // Meeting("Conference", startTime, endTime, Color(0xFF0F8644), false),
@@ -360,16 +394,10 @@ class _LongPressState extends State<LongPress> {
       );
     }
     return meetings;
-
-    _getDataSelect() => meetings;
   }
-
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return FutureBuilder<List<Meeting>>(
       future: _getDataSelect(),
       builder: (context, snapshot) {
@@ -383,7 +411,6 @@ class _LongPressState extends State<LongPress> {
             ),
           );
         }
-
         return Center(child: CircularProgressIndicator());
       },
     );

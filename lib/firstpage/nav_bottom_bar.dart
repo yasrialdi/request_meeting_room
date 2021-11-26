@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:request_meeting_room/account/akun.dart';
+import 'package:request_meeting_room/account/log.dart';
 import 'package:request_meeting_room/addbooking/add_booking.dart';
 import 'package:request_meeting_room/addbooking/tesbook.dart';
 import 'package:request_meeting_room/home/home.dart';
@@ -19,7 +20,7 @@ class PageNavBottomBar extends StatefulWidget {
 class _PageNavBottomBarState extends State<PageNavBottomBar> {
   int page = 0;
 
-  final List<Widget> _listPage = [PageHome(),PageListBooking(),PageInfoRoom(),MyApp()];
+  final List<Widget> _listPage = [PageHome(),PageListBooking(),PageInfoRoom(),PageProfil()];
 
   @override
   Widget build(BuildContext context) {

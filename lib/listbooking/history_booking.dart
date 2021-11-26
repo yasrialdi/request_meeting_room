@@ -28,6 +28,42 @@ class _PageHistoryBookingState extends State<PageHistoryBooking> {
     super.initState();
   }
 
+  void _showDialogHistoryBooking(DataHome dataHome) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("Detail Booking"),
+          content: SingleChildScrollView(
+            child: Container(
+              width: 500.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                      "Judul Meeting" "  : " "${dataHome.judul}\n"
+                          "Ruang Meeting" " : " "${dataHome.ruang}\n"
+                          "Mulai Meeting" "  : " "${dataHome.mulai} WIB\n"
+                          "Selesai Meeting" " : " "${dataHome.selesai} WIB\n"
+                          "Jumlah Peserta Meeting" " : ""${dataHome.jml_peserta}\n"
+                          "Catatan Meeting" " : " "${dataHome.catatan}\n")
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,11 +145,7 @@ class _PageHistoryBookingState extends State<PageHistoryBooking> {
                                     children: [
                                       MaterialButton(
                                         onPressed: () {
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      PageNavBottomBar()));
+                                          _showDialogHistoryBooking(listHome[index]);
                                         },
                                         shape: RoundedRectangleBorder(
                                           borderRadius:

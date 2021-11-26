@@ -11,20 +11,6 @@ class PageProfil extends StatefulWidget {
 }
 
 class _PageProfilState extends State<PageProfil> {
-  bool visibility1 = true;
-  bool visibility2 = false;
-
-  void _changed(bool visibility, String field) {
-    setState(() {
-      if (field == '1') {
-        visibility1 = visibility;
-      }
-      if (field == '2') {
-        visibility2 = visibility;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,20 +23,31 @@ class _PageProfilState extends State<PageProfil> {
             width: MediaQuery.of(context).size.width,
             height: 150,
             color: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             child: Stack(alignment: Alignment.center, children: [
+              Positioned(
+                  top: 0,
+                  right: 0,
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => PageProfilEdit()));
+                      },
+                      child: Icon(Icons.settings))),
               Positioned(
                 bottom: 0,
                 child: Column(
                   children: [
                     CircleAvatar(
                         radius: 30,
-                        backgroundImage: AssetImage('images/qwe.jpg')
+                        backgroundImage: AssetImage('images/foto.jpg')
                         // child:
                         ),
                     SizedBox(height: 10),
                     Text(
-                      'Yasri Aldi',
+                      'Ulul Azmi',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -64,76 +61,35 @@ class _PageProfilState extends State<PageProfil> {
             ]),
           ),
           SizedBox(height: 8),
-          SizedBox(height: 10),
           Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 0,
-                  blurRadius: 1.5,
-                  offset: Offset(0, 0),
-                )
-              ],
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.white,
-            ),
+            color: Colors.white,
+            // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   height: 45,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 18, right: 9),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Detail',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            _changed(true, '2');
-                          },
-                          child: visibility2
-                              ? InkWell(
-                                  onTap: () {
-                                    _changed(false, '2');
-                                  },
-                                  child: Icon(
-                                    Icons.keyboard_arrow_up_sharp,
-                                    color: Colors.black,
-                                  ),
-                                )
-                              : Icon(
-                                  Icons.keyboard_arrow_right_sharp,
-                                  color: Colors.black,
-                                ),
-                        )
-                      ],
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => PageProfilWisataFavorit()));
+                    },
+                    leading: Icon(
+                      Icons.favorite,
+                      color: Colors.red,
                     ),
-                  ),
-                ),
-                Visibility(
-                  visible: visibility2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 18, right: 9),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 15),
-                        Text('Nama    : Yasri Aldi\n'
-                            'Email     : yasrialdi549@gmail.com\n'
-                            'Divisi     : ICT\n'
-                            'Level      : Administrator'),
-                      ],
+                    minLeadingWidth: 10,
+                    title: Text(
+                      'Favorit',
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'Ubuntu',
+                          color: Colors.black),
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_right,
+                      color: Color(0xff2484DF),
                     ),
                   ),
                 ),
@@ -183,7 +139,7 @@ class _PageProfilState extends State<PageProfil> {
 
   PreferredSize _emptyAppBar() {
     return PreferredSize(
-      preferredSize: Size.fromHeight(40.0),
+      preferredSize: Size.fromHeight(0.0),
       child: AppBar(backgroundColor: Colors.white),
     );
   }

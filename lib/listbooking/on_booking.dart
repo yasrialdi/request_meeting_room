@@ -67,7 +67,7 @@ class _PageOnBookingState extends State<PageOnBooking> {
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
       onPressed:  () {
-        Navigator.of(context).pop(PageNavBottomBar());
+        Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(

@@ -37,8 +37,8 @@ class _PageSplashScreenState extends State<PageSplashScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'images/logo.png',
+                Image.network(
+                  'https://empkp.000webhostapp.com/app/logo.png',
                   height: 150,
                   width: 200,
                 ),
