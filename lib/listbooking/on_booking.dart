@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:request_meeting_room/addbooking/add_booking.dart';
+import 'package:request_meeting_room/addbooking/edit_booking.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:request_meeting_room/home/model_home.dart';
 import 'package:request_meeting_room/home/repository_home.dart';
@@ -22,7 +24,6 @@ class _PageOnBookingState extends State<PageOnBooking> {
     listHome = await repository.getDataHome();
     setState(() {});
   }
-
 
   void _showDialogBooking(DataHome dataHome) {
     showDialog(
@@ -203,6 +204,29 @@ class _PageOnBookingState extends State<PageOnBooking> {
                                           minWidth: 30,
                                           child: Text(
                                             'Detail',
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Ubuntu',
+                                                color: Colors.white),
+                                          ),
+                                          color: Color(0xff2484DF),
+                                        ),
+
+                                        SizedBox(width: 10),
+
+                                        MaterialButton(
+                                          onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => PageEditBooking(listHome[index])));
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                          height: 15,
+                                          minWidth: 30,
+                                          child: Text(
+                                            'Update',
                                             style: TextStyle(
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.bold,

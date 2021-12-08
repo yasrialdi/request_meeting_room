@@ -164,12 +164,9 @@ class _PageHomeState extends State<PageHome> {
                         showModalBottomSheet(
                             context: context,
                             builder: (context) => LongPress());
-
                       },
-
                     );
                   }
-
                   return Center(child: CircularProgressIndicator());
                 },
               ),

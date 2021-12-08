@@ -1,12 +1,23 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:request_meeting_room/account/akun.dart';
 import 'package:request_meeting_room/firstpage/RepositoryLogin.dart';
 import 'package:request_meeting_room/firstpage/login_register.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:request_meeting_room/model/Repository.dart';
+import 'package:flutter_session/flutter_session.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  var email = preferences.getString('email');
+  runApp(MaterialApp(home: email == null ? PageLogin() : PageProfil()));
+}
 
 class PageLogin extends StatefulWidget {
   const PageLogin({Key? key}) : super(key: key);
@@ -26,6 +37,9 @@ class _PageLoginState extends State<PageLogin> {
 
   final LogUrl = 'https://empkp.000webhostapp.com/app/login.php';
 
+
+
+
   Future login(String username, String password) async{
     try {
       final response = await http.post(Uri.parse(LogUrl), body: {
@@ -35,6 +49,10 @@ class _PageLoginState extends State<PageLogin> {
       });
       var data = json.decode(response.body);
       if(data == "true"){
+
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        preferences.setString('email', usernamectrl.text);
+
         Fluttertoast.showToast(
             msg: "Login Succes",
             toastLength: Toast.LENGTH_SHORT,
@@ -44,6 +62,9 @@ class _PageLoginState extends State<PageLogin> {
             textColor: Colors.black,
             fontSize: 16
         );
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('username', usernamectrl.text);
 
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (_) => PageNavBottomBar()));
