@@ -61,7 +61,7 @@ class DataHome {
         judul: item['judul_meeting'],
         ruang: item['ruang_meeting'],
         mulai: item['mulai'] != null
-            ? DateFormat('EEEE, d MMMM y HH:mm').format(parsedMulai)
+            ? DateFormat('yyyy-MM-dd').format(parsedMulai)
             : "",
         selesai: item['selesai'] != null
             ? DateFormat('EEEE, d MMMM y HH:mm').format(parsedSelesai)
