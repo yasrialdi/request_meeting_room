@@ -62,6 +62,16 @@ class _PageOnBookingState extends State<PageOnBooking> {
   }
 
 
+  edit(DataHome dataHome) async{
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) => PageEditBooking(
+              judul: dataHome.judul,
+              mulai: dataHome.mulai,
+              jumlahpst: dataHome.jml_peserta,
+              catatan: dataHome.catatan)));
+
+  }
+
   _showAlertDialogDelete(DataHome dataHome) {
 
     // set up the buttons
@@ -217,8 +227,7 @@ class _PageOnBookingState extends State<PageOnBooking> {
 
                                         MaterialButton(
                                           onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(
-                                              builder: (context) => PageEditBooking(listHome[index])));
+                                            edit(listHome[index]);
                                           },
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(5),

@@ -7,11 +7,17 @@ import 'package:intl/intl.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:request_meeting_room/home/model_home.dart';
+import 'package:request_meeting_room/home/repository_home.dart';
 
 import 'RepositoryAdd.dart';
 
 class PageEditBooking extends StatefulWidget {
-  const PageEditBooking(DataHome listHome, {Key? key}) : super(key: key);
+  final String judul;
+
+  final String mulai;
+  final String jumlahpst;
+  final String catatan;
+  PageEditBooking({required this.judul, required this.mulai, required this.jumlahpst, required this.catatan});
 
   @override
   _PageEditBookingState createState() => _PageEditBookingState();
@@ -19,6 +25,9 @@ class PageEditBooking extends StatefulWidget {
 
 class _PageEditBookingState extends State<PageEditBooking> {
   final formKey = GlobalKey<FormState>();
+
+  bool editMode = false;
+
 
   String dropdownRuang = '1';
   DateTime selectedDate1 = DateTime.now();
@@ -34,6 +43,8 @@ class _PageEditBookingState extends State<PageEditBooking> {
   TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
 
   RepositoryAdd repository = RepositoryAdd();
+  RepositoryHome reposi = RepositoryHome();
+
   final _judulController = TextEditingController();
   final _jumlahpesertaController = TextEditingController();
   final _catatanController = TextEditingController();
@@ -110,9 +121,9 @@ class _PageEditBookingState extends State<PageEditBooking> {
   }
 
 
-  final AddUrl = 'https://empkp.000webhostapp.com/app/adddatabooking1lagi.php';
+  final AddUrl = 'https://empkp.000webhostapp.com/app/editdatabooking1lagi.php';
 
-  Future postDataAdd(
+  Future postDataEdit(
       String judul, String ruangan, String mulai, String selesai, String jumlah, String catatan) async {
     try {
       final response = await http.post(Uri.parse(AddUrl), body: {
@@ -152,8 +163,8 @@ class _PageEditBookingState extends State<PageEditBooking> {
   }
 
 
-  void postBook() async{
-    bool response = await postDataAdd(
+  void postBookEdit() async{
+    bool response = await postDataEdit(
         _judulController.text,
         dropdownRuang,
         _dateController1.text +" "+ _timeController1.text,
@@ -174,9 +185,16 @@ class _PageEditBookingState extends State<PageEditBooking> {
     _timeController2.text = formatDate(
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
         [HH, ':', nn]).toString();
+
+
+      _judulController.text = widget.judul.toString();
+
+      _jumlahpesertaController.text = widget.jumlahpst.toString();
+      _catatanController.text = widget.mulai.toString();
+
+
     super.initState();
   }
-
 
   _showAlertDialogAdd() {
 
@@ -190,7 +208,7 @@ class _PageEditBookingState extends State<PageEditBooking> {
     Widget continueButton = TextButton(
       child: Text("Continue"),
       onPressed:  () async {
-        postBook();
+        postBookEdit();
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context){
               return PageNavBottomBar();
