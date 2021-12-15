@@ -13,11 +13,17 @@ import 'RepositoryAdd.dart';
 
 class PageEditBooking extends StatefulWidget {
   final String judul;
-
   final String mulai;
+  final String selesai;
   final String jumlahpst;
   final String catatan;
-  PageEditBooking({required this.judul, required this.mulai, required this.jumlahpst, required this.catatan});
+
+  PageEditBooking(
+      {required this.judul,
+      required this.mulai,
+      required this.selesai,
+      required this.jumlahpst,
+      required this.catatan});
 
   @override
   _PageEditBookingState createState() => _PageEditBookingState();
@@ -25,22 +31,15 @@ class PageEditBooking extends StatefulWidget {
 
 class _PageEditBookingState extends State<PageEditBooking> {
   final formKey = GlobalKey<FormState>();
-
   bool editMode = false;
-
-
   String dropdownRuang = '1';
-  DateTime selectedDate1 = DateTime.now();
-  DateTime selectedDate2 = DateTime.now();
-
-  DateFormat formatter = DateFormat('yyyy-MM-dd');
-
-
+  late DateTime selectedDate1;
+  late DateTime selectedDate2;
+  late TimeOfDay selectedTime1;
+  late TimeOfDay selectedTime2;
   late String _hour1, _minute1, _time1;
   late String _hour2, _minute2, _time2;
-
-  TimeOfDay selectedTime1 = TimeOfDay(hour: 00, minute: 00);
-  TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
+  DateFormat formatter = DateFormat('yyyy-MM-dd');
 
   RepositoryAdd repository = RepositoryAdd();
   RepositoryHome reposi = RepositoryHome();
@@ -49,12 +48,10 @@ class _PageEditBookingState extends State<PageEditBooking> {
   final _jumlahpesertaController = TextEditingController();
   final _catatanController = TextEditingController();
 
-
   TextEditingController _dateController1 = TextEditingController();
   TextEditingController _timeController1 = TextEditingController();
   TextEditingController _dateController2 = TextEditingController();
   TextEditingController _timeController2 = TextEditingController();
-
 
   Future<Null> _selectDate1(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -120,14 +117,12 @@ class _PageEditBookingState extends State<PageEditBooking> {
       });
   }
 
-
   final AddUrl = 'https://empkp.000webhostapp.com/app/editdatabooking1lagi.php';
 
-  Future postDataEdit(
-      String judul, String ruangan, String mulai, String selesai, String jumlah, String catatan) async {
+  Future postDataEdit(String judul, String ruangan, String mulai,
+      String selesai, String jumlah, String catatan) async {
     try {
       final response = await http.post(Uri.parse(AddUrl), body: {
-
         "judul_meeting": judul,
         "ruang_meeting": ruangan,
         "mulai": mulai,
@@ -143,8 +138,7 @@ class _PageEditBookingState extends State<PageEditBooking> {
             timeInSecForIosWeb: 3,
             backgroundColor: Colors.white,
             textColor: Colors.black,
-            fontSize: 16
-        );
+            fontSize: 16);
       } else {
         Fluttertoast.showToast(
             msg: "Data Booking Gagal Ditambahkan\n"
@@ -154,78 +148,89 @@ class _PageEditBookingState extends State<PageEditBooking> {
             timeInSecForIosWeb: 3,
             backgroundColor: Colors.white,
             textColor: Colors.black,
-            fontSize: 16
-        );
+            fontSize: 16);
       }
     } catch (e) {
       print(e.toString());
     }
   }
 
-
-  void postBookEdit() async{
+  void postBookEdit() async {
     bool response = await postDataEdit(
         _judulController.text,
         dropdownRuang,
-        _dateController1.text +" "+ _timeController1.text,
-        _dateController2.text +" "+ _timeController2.text,
+        _dateController1.text + " " + _timeController1.text,
+        _dateController2.text + " " + _timeController2.text,
         _jumlahpesertaController.text,
         _catatanController.text);
   }
 
   @override
   void initState() {
-    _dateController1.text = DateFormat.yMd().format(DateTime.now());
-    _dateController2.text = DateFormat.yMd().format(DateTime.now());
+    DateTime startedAt = DateFormat('EEEE, d MMMM y HH:mm').parse(widget.mulai);
+    DateTime endedAt = DateFormat('EEEE, d MMMM y HH:mm').parse(widget.selesai);
 
-    _timeController1.text = formatDate(
-        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
-        [HH, ':', nn]).toString();
+    selectedDate1 = startedAt;
+    selectedDate2 = endedAt;
+    selectedTime1 = TimeOfDay(hour: startedAt.hour, minute: startedAt.minute);
+    selectedTime2 = TimeOfDay(hour: endedAt.hour, minute: endedAt.minute);
 
-    _timeController2.text = formatDate(
-        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
-        [HH, ':', nn]).toString();
+    _dateController1.text = DateFormat.yMd().format(startedAt);
+    _dateController2.text = DateFormat.yMd().format(endedAt);
 
+    _timeController1.text = formatDate(startedAt, [HH, ':', nn]).toString();
+    _timeController2.text = formatDate(endedAt, [HH, ':', nn]).toString();
 
-      _judulController.text = widget.judul.toString();
+    _judulController.text = widget.judul.toString();
 
-      _jumlahpesertaController.text = widget.jumlahpst.toString();
-      _catatanController.text = widget.mulai.toString();
-
+    _jumlahpesertaController.text = widget.jumlahpst.toString();
+    _catatanController.text = widget.mulai.toString();
 
     super.initState();
   }
 
   _showAlertDialogAdd() {
-
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
-      onPressed:  () {
+      onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
       child: Text("Continue"),
-      onPressed:  () async {
+      onPressed: () async {
         postBookEdit();
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context){
-              return PageNavBottomBar();
-            }));
+            MaterialPageRoute(builder: (context) {
+          return PageNavBottomBar();
+        }));
       },
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Cek Kembali"),
-      content: Text(
-          "Judul Meeting" "  : " "${_judulController.text}\n"
-              "Ruang Meeting" "  : " "$dropdownRuang\n"
-              "Mulai Meeting" " : " "${_dateController1.text} " " ${_timeController1.text}\n"
-              "Selesai Meeting" "  : " "${_dateController2.text} " " ${_timeController2.text}\n"
-              "Jumlah Peserta Meeting" "  : " "${_jumlahpesertaController.text}\n"
-              "Catatan Meeting" "  : " "${_catatanController.text}\n"),
+      content: Text("Judul Meeting"
+          "  : "
+          "${_judulController.text}\n"
+          "Ruang Meeting"
+          "  : "
+          "$dropdownRuang\n"
+          "Mulai Meeting"
+          " : "
+          "${_dateController1.text} "
+          " ${_timeController1.text}\n"
+          "Selesai Meeting"
+          "  : "
+          "${_dateController2.text} "
+          " ${_timeController2.text}\n"
+          "Jumlah Peserta Meeting"
+          "  : "
+          "${_jumlahpesertaController.text}\n"
+          "Catatan Meeting"
+          "  : "
+          "${_catatanController.text}\n"),
       actions: [
         cancelButton,
         continueButton,
@@ -241,10 +246,8 @@ class _PageEditBookingState extends State<PageEditBooking> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Color(0xffDCE5F0),
       appBar: AppBar(
@@ -312,11 +315,10 @@ class _PageEditBookingState extends State<PageEditBooking> {
                     children: [
                       Icon(Icons.room),
                       SizedBox(width: 5),
-                      Text("Ruang Meeting",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "Ubuntu"
-                        ),),
+                      Text(
+                        "Ruang Meeting",
+                        style: TextStyle(fontSize: 20, fontFamily: "Ubuntu"),
+                      ),
                       SizedBox(width: 8),
                       Expanded(
                         child: DropdownButtonHideUnderline(
@@ -327,7 +329,9 @@ class _PageEditBookingState extends State<PageEditBooking> {
                             iconSize: 50,
                             elevation: 16,
                             style: const TextStyle(
-                                fontSize: 23, color: Colors.black, fontFamily: "cambria"),
+                                fontSize: 23,
+                                color: Colors.black,
+                                fontFamily: "cambria"),
                             onChanged: (String? newValue) {
                               setState(() {
                                 dropdownRuang = newValue!;
@@ -365,10 +369,11 @@ class _PageEditBookingState extends State<PageEditBooking> {
                         onPressed: () {
                           _selectDate1(context);
                         },
-                        child: Text("Start Meeting ${selectedDate1.day} - ${selectedDate1.month} - ${selectedDate1.year} ",
-                          style: TextStyle(
-                              fontFamily: "Ubuntu"
-                          ),),),
+                        child: Text(
+                          "Start Meeting ${selectedDate1.day} - ${selectedDate1.month} - ${selectedDate1.year} ",
+                          style: TextStyle(fontFamily: "Ubuntu"),
+                        ),
+                      ),
                       SizedBox(width: 65),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -395,7 +400,8 @@ class _PageEditBookingState extends State<PageEditBooking> {
                         onPressed: () {
                           _selectDate2(context);
                         },
-                        child: Text("End Meeeting ${selectedDate2.day} - ${selectedDate2.month} - ${selectedDate2.year}"),
+                        child: Text(
+                            "End Meeeting ${selectedDate2.day} - ${selectedDate2.month} - ${selectedDate2.year}"),
                       ),
                       SizedBox(width: 67),
                       Row(
@@ -429,11 +435,10 @@ class _PageEditBookingState extends State<PageEditBooking> {
                     children: [
                       Icon(Icons.person),
                       SizedBox(width: 5),
-                      Text("Jumlah Peserta",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "Ubuntu"
-                        ),),
+                      Text(
+                        "Jumlah Peserta",
+                        style: TextStyle(fontSize: 20, fontFamily: "Ubuntu"),
+                      ),
                       SizedBox(width: 120),
                       Expanded(
                         child: TextFormField(
@@ -472,13 +477,11 @@ class _PageEditBookingState extends State<PageEditBooking> {
                     children: [
                       Icon(Icons.note_rounded),
                       SizedBox(width: 5),
-                      Text("Catatan",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: "Ubuntu"
-                        ),),
+                      Text(
+                        "Catatan",
+                        style: TextStyle(fontSize: 20, fontFamily: "Ubuntu"),
+                      ),
                       SizedBox(width: 50),
-
                     ],
                   ),
                 ),
@@ -492,7 +495,7 @@ class _PageEditBookingState extends State<PageEditBooking> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     ),
                     validator: (text) {
                       if (text == null || text.isEmpty) {
@@ -503,15 +506,12 @@ class _PageEditBookingState extends State<PageEditBooking> {
                   ),
                 ),
                 SizedBox(height: 50),
-
                 ElevatedButton(
                   style: ButtonStyle(),
-                  onPressed: ()  {
-                    if(formKey.currentState!.validate()){
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
                       _showAlertDialogAdd();
                     }
-
-
                   },
                   child: Text(
                     'SIMPAN',

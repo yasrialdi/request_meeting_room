@@ -16,11 +16,10 @@ class PageOnBooking extends StatefulWidget {
 }
 
 class _PageOnBookingState extends State<PageOnBooking> {
-
   List<DataHome> listHome = [];
   RepositoryHome repository = RepositoryHome();
 
-  getDataHome() async{
+  getDataHome() async {
     listHome = await repository.getDataHome();
     setState(() {});
   }
@@ -37,13 +36,24 @@ class _PageOnBookingState extends State<PageOnBooking> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                      "Judul Meeting" "  : " "${dataHome.judul}\n"
-                          "Ruang Meeting" " : " "${dataHome.ruang}\n"
-                          "Mulai Meeting" "  : " "${dataHome.mulai} WIB\n"
-                          "Selesai Meeting" " : " "${dataHome.selesai} WIB\n"
-                          "Jumlah Peserta Meeting" " : ""${dataHome.jml_peserta}\n"
-                          "Catatan Meeting" " : " "${dataHome.catatan}\n")
+                  Text("Judul Meeting"
+                      "  : "
+                      "${dataHome.judul}\n"
+                      "Ruang Meeting"
+                      " : "
+                      "${dataHome.ruang}\n"
+                      "Mulai Meeting"
+                      "  : "
+                      "${dataHome.mulai} WIB\n"
+                      "Selesai Meeting"
+                      " : "
+                      "${dataHome.selesai} WIB\n"
+                      "Jumlah Peserta Meeting"
+                      " : "
+                      "${dataHome.jml_peserta}\n"
+                      "Catatan Meeting"
+                      " : "
+                      "${dataHome.catatan}\n")
                 ],
               ),
             ),
@@ -61,33 +71,36 @@ class _PageOnBookingState extends State<PageOnBooking> {
     );
   }
 
-
-  edit(DataHome dataHome) async{
-      Navigator.push(context, MaterialPageRoute(
-          builder: (context) => PageEditBooking(
-              judul: dataHome.judul,
-              mulai: dataHome.mulai,
-              jumlahpst: dataHome.jml_peserta,
-              catatan: dataHome.catatan)));
-
+  edit(DataHome dataHome) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PageEditBooking(
+          judul: dataHome.judul,
+          mulai: dataHome.mulai,
+          selesai: dataHome.selesai,
+          jumlahpst: dataHome.jml_peserta,
+          catatan: dataHome.catatan,
+        ),
+      ),
+    );
   }
 
   _showAlertDialogDelete(DataHome dataHome) {
-
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
-      onPressed:  () {
+      onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
       child: Text("Continue"),
-      onPressed:  () async {
+      onPressed: () async {
         bool response = await repository.deletebooking('${dataHome.id}');
-        if(response != '0'){
+        if (response != '0') {
           Navigator.of(context).pop();
-        }else{
+        } else {
           print('Delete data failed');
         }
         getDataHome();
@@ -123,162 +136,155 @@ class _PageOnBookingState extends State<PageOnBooking> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffDCE5F0),
-      body:
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Container(
-
-            padding: EdgeInsets.symmetric(horizontal: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              // color: Colors.white,
-            ),
-            child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: listHome.length,
-                itemBuilder: (BuildContext context, index) {
-                  return Container(
-                    height: 135,
-                    margin: EdgeInsets.only(bottom: 3),
-                    child: Card(
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: Image.network('${listHome[index].foto}',
-                                fit: BoxFit.cover,
-                                height: MediaQuery.of(context).size.height,
-                                width: 115,
-                              ),
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            // color: Colors.white,
+          ),
+          child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: listHome.length,
+              itemBuilder: (BuildContext context, index) {
+                return Container(
+                  height: 135,
+                  margin: EdgeInsets.only(bottom: 3),
+                  child: Card(
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Image.network(
+                              '${listHome[index].foto}',
+                              fit: BoxFit.cover,
+                              height: MediaQuery.of(context).size.height,
+                              width: 115,
                             ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${listHome[index].ruang}',
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        fontFamily: 'Ubuntu',
-                                        color: Colors.black,
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${listHome[index].ruang}',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontFamily: 'Ubuntu',
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(height: 18),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${listHome[index].mulai}',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontFamily: 'Ubuntu',
+                                          color: Color(0xff928B8B),
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(height: 18),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '${listHome[index].mulai}',
+                                    ],
+                                  ),
+                                  SizedBox(height: 1),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${listHome[index].selesai}',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontFamily: 'Ubuntu',
+                                          color: Color(0xff928B8B),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 1),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      MaterialButton(
+                                        onPressed: () {
+                                          _showDialogBooking(listHome[index]);
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        height: 15,
+                                        minWidth: 30,
+                                        child: Text(
+                                          'Detail',
                                           style: TextStyle(
-                                            fontSize: 11,
-                                            fontFamily: 'Ubuntu',
-                                            color: Color(0xff928B8B),
-                                          ),
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Ubuntu',
+                                              color: Colors.white),
                                         ),
-                                      ],
-                                    ),
-
-                                    SizedBox(height: 1),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '${listHome[index].selesai}',
+                                        color: Color(0xff2484DF),
+                                      ),
+                                      SizedBox(width: 10),
+                                      MaterialButton(
+                                        onPressed: () {
+                                          edit(listHome[index]);
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        height: 15,
+                                        minWidth: 30,
+                                        child: Text(
+                                          'Update',
                                           style: TextStyle(
-                                            fontSize: 11,
-                                            fontFamily: 'Ubuntu',
-                                            color: Color(0xff928B8B),
-                                          ),
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Ubuntu',
+                                              color: Colors.white),
                                         ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 1),
-
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        MaterialButton(
-                                          onPressed: () {
-                                            _showDialogBooking(listHome[index]);
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                          ),
-                                          height: 15,
-                                          minWidth: 30,
-                                          child: Text(
-                                            'Detail',
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Ubuntu',
-                                                color: Colors.white),
-                                          ),
-                                          color: Color(0xff2484DF),
+                                        color: Color(0xff2484DF),
+                                      ),
+                                      SizedBox(width: 10),
+                                      MaterialButton(
+                                        onPressed: () async {
+                                          _showAlertDialogDelete(
+                                              listHome[index]);
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
-
-                                        SizedBox(width: 10),
-
-                                        MaterialButton(
-                                          onPressed: () {
-                                            edit(listHome[index]);
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                          ),
-                                          height: 15,
-                                          minWidth: 30,
-                                          child: Text(
-                                            'Update',
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Ubuntu',
-                                                color: Colors.white),
-                                          ),
-                                          color: Color(0xff2484DF),
+                                        height: 15,
+                                        minWidth: 30,
+                                        child: Text(
+                                          'Hapus',
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Ubuntu',
+                                              color: Colors.white),
                                         ),
-
-                                        SizedBox(width: 10),
-
-                                        MaterialButton(
-                                          onPressed: () async{
-                                            _showAlertDialogDelete(listHome[index]);
-
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                          ),
-                                          height: 15,
-                                          minWidth: 30,
-                                          child: Text(
-                                            'Hapus',
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Ubuntu',
-                                                color: Colors.white),
-                                          ),
-                                          color: Colors.red,
-                                        ),
-
-                                        SizedBox(height: 10),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                        color: Colors.red,
+                                      ),
+                                      SizedBox(height: 10),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                          ]),
-                    ),
-                  );
-                }),
+                          ),
+                        ]),
+                  ),
+                );
+              }),
         ),
       ),
     );
