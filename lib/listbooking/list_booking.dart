@@ -13,7 +13,7 @@ class PageListBooking extends StatefulWidget {
 }
 
 class _PageListBookingState extends State<PageListBooking>
-with SingleTickerProviderStateMixin{
+    with SingleTickerProviderStateMixin{
 
   bool changed = true;
   TabController?tabcontroll;
@@ -37,26 +37,17 @@ with SingleTickerProviderStateMixin{
     return Scaffold(
         backgroundColor: Color(0xffDCE5F0),
         appBar: AppBar(
-          backgroundColor: Color(0xffDCE5F0),
-          title: Column(
-            children: [
-              Container(
-                height: 40,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 10),
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Search',
-                      hintStyle: TextStyle(fontSize: 13, fontFamily: 'Ubuntu'),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide.none),
-                      suffixIcon: Icon(Icons.search)),
-                ),
-              )
-            ],
+          title: Text(
+            'List Meeting',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Ubuntu',
+              color: Colors.black,
+            ),
           ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
         ),
         body: Column(
 
@@ -77,7 +68,7 @@ with SingleTickerProviderStateMixin{
                 ),
                 Tab(
                   child: Text(
-                    'History Booking',
+                    'History Meeting',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'Ubuntu',

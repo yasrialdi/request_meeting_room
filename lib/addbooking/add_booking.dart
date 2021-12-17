@@ -203,8 +203,8 @@ class _PageAddBookingState extends State<PageAddBooking> {
       content: Text(
           "Judul Meeting" "  : " "${_judulController.text}\n"
               "Ruang Meeting" "  : " "$dropdownRuang\n"
-              "Mulai Meeting" " : " "${_dateController1.text} " " ${_timeController1.text}\n"
-              "Selesai Meeting" "  : " "${_dateController2.text} " " ${_timeController2.text}\n"
+              "Mulai Meeting" " : " "${_dateController1.text = formatter.format(selectedDate1)} " " ${_timeController1.text}\n"
+              "Selesai Meeting" "  : " "${_dateController2.text = formatter.format(selectedDate2)} " " ${_timeController2.text}\n"
               "Jumlah Peserta Meeting" "  : " "${_jumlahpesertaController.text}\n"
               "Catatan Meeting" "  : " "${_catatanController.text}\n"),
       actions: [
@@ -225,6 +225,10 @@ class _PageAddBookingState extends State<PageAddBooking> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
+
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
@@ -396,8 +400,8 @@ class _PageAddBookingState extends State<PageAddBooking> {
                     SizedBox(width: 5),
                     Text("Jumlah Peserta",
                       style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: "Ubuntu"
+                          fontSize: 20,
+                          fontFamily: "Ubuntu"
                       ),),
                     SizedBox(width: 120),
                     Expanded(
@@ -442,7 +446,7 @@ class _PageAddBookingState extends State<PageAddBooking> {
                           fontSize: 20,
                           fontFamily: "Ubuntu"
                       ),),
-                SizedBox(width: 50),
+                    SizedBox(width: 50),
 
                   ],
                 ),

@@ -53,35 +53,35 @@ class _PageHomeState extends State<PageHome> {
     showDialog(
       context: context,
       builder: (_) {
-      return AlertDialog(
-        title: Text("Detail Booking"),
-        content: SingleChildScrollView(
-          child: Container(
-            width: 150,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                          "Judul Meeting" " : " "${dataHome.judul}\n"
-                              "Ruang Meeting" " : " "${dataHome.ruang}\n"
-                              "Mulai Meeting" " : " "${dataHome.mulai} WIB\n"
-                              "Selesai Meeting" " : " "${dataHome.selesai} WIB\n"
-                              "Jumlah Peserta Meeting" " : ""${dataHome.jml_peserta}\n"
-                              "Catatan Meeting" " : " "${dataHome.catatan}\n")
-              ],
+        return AlertDialog(
+          title: Text("Detail Booking"),
+          content: SingleChildScrollView(
+            child: Container(
+              width: 150,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                      "Judul Meeting" " : " "${dataHome.judul}\n"
+                          "Ruang Meeting" " : " "${dataHome.ruang}\n"
+                          "Mulai Meeting" " : " "${dataHome.mulai} WIB\n"
+                          "Selesai Meeting" " : " "${dataHome.selesai} WIB\n"
+                          "Jumlah Peserta Meeting" " : ""${dataHome.jml_peserta}\n"
+                          "Catatan Meeting" " : " "${dataHome.catatan}\n")
+                ],
+              ),
             ),
           ),
-        ),
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text("OK"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -133,7 +133,7 @@ class _PageHomeState extends State<PageHome> {
       backgroundColor: Color(0xffDCE5F0),
       appBar: AppBar(
         title: Text(
-          'Info Room Meeting',
+          'Home',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -164,12 +164,9 @@ class _PageHomeState extends State<PageHome> {
                         showModalBottomSheet(
                             context: context,
                             builder: (context) => LongPress());
-
                       },
-
                     );
                   }
-
                   return Center(child: CircularProgressIndicator());
                 },
               ),
@@ -221,12 +218,12 @@ class _PageHomeState extends State<PageHome> {
                                         horizontal: 10, vertical: 5),
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '${listHome[index].ruang}',
+                                          'Ruang Meeting ${listHome[index].ruang}',
                                           style: TextStyle(
                                             fontSize: 17,
                                             fontFamily: 'Ubuntu',
@@ -262,7 +259,7 @@ class _PageHomeState extends State<PageHome> {
                                         SizedBox(height: 1),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                          MainAxisAlignment.end,
                                           children: [
                                             MaterialButton(
                                               onPressed: () {
@@ -270,7 +267,7 @@ class _PageHomeState extends State<PageHome> {
                                               },
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(5),
+                                                BorderRadius.circular(5),
                                               ),
                                               height: 15,
                                               minWidth: 30,

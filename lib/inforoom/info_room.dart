@@ -36,47 +36,52 @@ class _PageInfoRoomState extends State<PageInfoRoom> {
     return Scaffold(
       backgroundColor: Color(0xffDCE5F0),
       appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text('Info Room',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ))),
+        title: Text(
+          'Info Room Meeting',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Ubuntu',
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,),
       body: SingleChildScrollView(
         child: Container(
-            child: InkWell(onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => PageDetailRoom()));
-            },
+          child: InkWell(onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => PageDetailRoom()));
+          },
 
-              child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: listRoom.length,
-                  itemBuilder: (BuildContext context, index) {
-                    return Container(
+            child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: listRoom.length,
+                itemBuilder: (BuildContext context, index) {
+                  return Container(
 
-                      child: Card(
-                        child: Column(
-                          children: [
-                            Image.network('${listRoom[index].foto_room}'),
-                            SizedBox(height: 8),
-                            Text(
-                              '${listRoom[index].ruang_meeting}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'ubuntu',
-                                color: Colors.black,
-                              ),
+                    child: Card(
+                      child: Column(
+                        children: [
+                          Image.network('${listRoom[index].foto_room}'),
+                          SizedBox(height: 8),
+                          Text(
+                            '${listRoom[index].ruang_meeting}',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'ubuntu',
+                              color: Colors.black,
                             ),
-                            SizedBox(height: 8)
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: 8)
+                        ],
                       ),
-                    );
-                  }),
-            ),
+                    ),
+                  );
+                }),
           ),
+        ),
       ),
     );
   }

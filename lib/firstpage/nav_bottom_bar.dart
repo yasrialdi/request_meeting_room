@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:request_meeting_room/account/akun.dart';
-import 'package:request_meeting_room/account/log.dart';
 import 'package:request_meeting_room/addbooking/add_booking.dart';
-import 'package:request_meeting_room/addbooking/tesbook.dart';
 import 'package:request_meeting_room/home/home.dart';
 import 'package:request_meeting_room/inforoom/info_room.dart';
 import 'package:request_meeting_room/listbooking/list_booking.dart';
-import 'package:request_meeting_room/addbooking/tesbook.dart';
-
-
 
 class PageNavBottomBar extends StatefulWidget {
   const PageNavBottomBar({Key? key}) : super(key: key);
@@ -20,7 +16,14 @@ class PageNavBottomBar extends StatefulWidget {
 class _PageNavBottomBarState extends State<PageNavBottomBar> {
   int page = 0;
 
+  @override
+  // TODO: implement widget
+  PageNavBottomBar get widget => super.widget;
+
   final List<Widget> _listPage = [PageHome(),PageListBooking(),PageInfoRoom(),PageProfil()];
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,16 +75,3 @@ class _PageNavBottomBarState extends State<PageNavBottomBar> {
   }
 }
 
-
-class PageNavHome extends StatelessWidget {
-  const PageNavHome({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/berhasil' :(context) => PageNavBottomBar()
-      },
-    );
-  }
-}

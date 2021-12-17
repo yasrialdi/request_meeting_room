@@ -94,7 +94,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
         backgroundColor: Color(0xffDCE5F0),
         appBar: AppBar(
           title: Text(
-            'Request Meeting Room Online',
+            'Register',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
