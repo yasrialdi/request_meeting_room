@@ -3,16 +3,16 @@ import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:request_meeting_room/home/model_home.dart';
 import 'package:request_meeting_room/home/repository_home.dart';
 
-import 'list_booking.dart';
+import 'list_booking_user.dart';
 
-class PageHistoryBookingAdmin extends StatefulWidget {
-  const PageHistoryBookingAdmin(TabController? tabcontroll, {Key? key}) : super(key: key);
+class PageHistoryBookingUser extends StatefulWidget {
+  const PageHistoryBookingUser(TabController? tabcontroll, {Key? key}) : super(key: key);
 
   @override
-  _PageHistoryBookingAdminState createState() => _PageHistoryBookingAdminState();
+  _PageHistoryBookingUserState createState() => _PageHistoryBookingUserState();
 }
 
-class _PageHistoryBookingAdminState extends State<PageHistoryBookingAdmin> {
+class _PageHistoryBookingUserState extends State<PageHistoryBookingUser> {
 
   List<DataHome> listHome = [];
   RepositoryHome repository = RepositoryHome();

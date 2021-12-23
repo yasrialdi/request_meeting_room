@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:request_meeting_room/Admin/nav_bottom_bar.dart';
-import 'package:request_meeting_room/User/nav_bottom_bar.dart';
+import 'package:request_meeting_room/Admin/nav_bottom_bar_admin.dart';
+import 'package:request_meeting_room/User/nav_bottom_bar_user.dart';
 import 'package:request_meeting_room/firstpage/boarding_screen.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';

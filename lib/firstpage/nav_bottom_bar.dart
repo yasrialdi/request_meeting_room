@@ -4,7 +4,7 @@ import 'package:request_meeting_room/account/akun.dart';
 import 'package:request_meeting_room/addbooking/add_booking.dart';
 import 'package:request_meeting_room/home/home.dart';
 import 'package:request_meeting_room/inforoom/info_room.dart';
-import 'package:request_meeting_room/Admin/listbooking/list_booking.dart';
+import 'package:request_meeting_room/Admin/listbooking/list_booking_admin.dart';
 
 class PageNavBottomBar extends StatefulWidget {
   const PageNavBottomBar({Key? key}) : super(key: key);

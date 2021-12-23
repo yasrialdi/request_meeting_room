@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
-import 'package:request_meeting_room/home/home.dart';
-import 'package:request_meeting_room/Admin/listbooking/history_booking.dart';
-import 'package:request_meeting_room/Admin/listbooking/on_booking.dart';
+import 'package:request_meeting_room/User/listbooking/history_booking_user.dart';
+import 'package:request_meeting_room/User/listbooking/on_booking_user.dart';
 
-class PageListBookingAdmin extends StatefulWidget {
-  const PageListBookingAdmin({Key? key}) : super(key: key);
+class PageListBookingUser extends StatefulWidget {
+  const PageListBookingUser({Key? key}) : super(key: key);
 
   @override
-  _PageListBookingAdminState createState() => _PageListBookingAdminState();
+  _PageListBookingUserState createState() => _PageListBookingUserState();
 }
 
-class _PageListBookingAdminState extends State<PageListBookingAdmin>
+class _PageListBookingUserState extends State<PageListBookingUser>
     with SingleTickerProviderStateMixin{
 
   bool changed = true;
@@ -82,8 +80,8 @@ class _PageListBookingAdminState extends State<PageListBookingAdmin>
                 child: TabBarView(
                   controller: tabcontroll,
                   children: [
-                    PageOnBookingAdmin(tabcontroll),
-                    PageHistoryBookingAdmin(tabcontroll)
+                    PageOnBookingUser(tabcontroll),
+                    PageHistoryBookingUser(tabcontroll)
                   ],
                 ),
               ),

@@ -5,15 +5,15 @@ import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:request_meeting_room/home/model_home.dart';
 import 'package:request_meeting_room/home/repository_home.dart';
 import 'dart:async';
-import 'list_booking.dart';
+import 'list_booking_admin.dart';
 
-class PageOnBookingUser extends StatefulWidget {
-  const PageOnBookingUser(TabController? tabcontroll, {Key? key}) : super(key: key);
+class PageOnBookingAdmin extends StatefulWidget {
+  const PageOnBookingAdmin(TabController? tabcontroll, {Key? key}) : super(key: key);
   @override
-  _PageOnBookingUserState createState() => _PageOnBookingUserState();
+  _PageOnBookingAdminState createState() => _PageOnBookingAdminState();
 }
 
-class _PageOnBookingUserState extends State<PageOnBookingUser> {
+class _PageOnBookingAdminState extends State<PageOnBookingAdmin> {
   List<DataHome> listHome = [];
   RepositoryHome repository = RepositoryHome();
   getDataHome() async {
@@ -229,48 +229,48 @@ class _PageOnBookingUserState extends State<PageOnBookingUser> {
                                         color: Color(0xff2484DF),
                                       ),
                                       SizedBox(width: 10),
-                                      // MaterialButton(
-                                      //   onPressed: () {
-                                      //     edit(listHome[index]);
-                                      //   },
-                                      //   shape: RoundedRectangleBorder(
-                                      //     borderRadius:
-                                      //     BorderRadius.circular(5),
-                                      //   ),
-                                      //   height: 15,
-                                      //   minWidth: 30,
-                                      //   child: Text(
-                                      //     'Update',
-                                      //     style: TextStyle(
-                                      //         fontSize: 10,
-                                      //         fontWeight: FontWeight.bold,
-                                      //         fontFamily: 'Ubuntu',
-                                      //         color: Colors.white),
-                                      //   ),
-                                      //   color: Color(0xff2484DF),
-                                      // ),
-                                      // SizedBox(width: 10),
-                                      // MaterialButton(
-                                      //   onPressed: () async {
-                                      //     _showAlertDialogDelete(
-                                      //         listHome[index]);
-                                      //   },
-                                      //   shape: RoundedRectangleBorder(
-                                      //     borderRadius:
-                                      //     BorderRadius.circular(5),
-                                      //   ),
-                                      //   height: 15,
-                                      //   minWidth: 30,
-                                      //   child: Text(
-                                      //     'Hapus',
-                                      //     style: TextStyle(
-                                      //         fontSize: 10,
-                                      //         fontWeight: FontWeight.bold,
-                                      //         fontFamily: 'Ubuntu',
-                                      //         color: Colors.white),
-                                      //   ),
-                                      //   color: Colors.red,
-                                      // ),
+                                      MaterialButton(
+                                        onPressed: () {
+                                          edit(listHome[index]);
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(5),
+                                        ),
+                                        height: 15,
+                                        minWidth: 30,
+                                        child: Text(
+                                          'Update',
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Ubuntu',
+                                              color: Colors.white),
+                                        ),
+                                        color: Color(0xff2484DF),
+                                      ),
+                                      SizedBox(width: 10),
+                                      MaterialButton(
+                                        onPressed: () async {
+                                          _showAlertDialogDelete(
+                                              listHome[index]);
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(5),
+                                        ),
+                                        height: 15,
+                                        minWidth: 30,
+                                        child: Text(
+                                          'Hapus',
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Ubuntu',
+                                              color: Colors.white),
+                                        ),
+                                        color: Colors.red,
+                                      ),
                                       SizedBox(height: 10),
                                     ],
                                   ),
