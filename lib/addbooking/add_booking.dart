@@ -24,6 +24,7 @@ class _PageAddBookingState extends State<PageAddBooking> {
   DateTime selectedDate2 = DateTime.now();
 
   DateFormat formatter = DateFormat('yyyy-MM-dd');
+  DateFormat formatAd = DateFormat('EEEE, d MMMM y','id_ID');
 
 
   late String _hour1, _minute1, _time1;
@@ -155,8 +156,8 @@ class _PageAddBookingState extends State<PageAddBooking> {
     bool response = await postDataAdd(
         _judulController.text,
         dropdownRuang,
-        _dateController1.text +" "+ _timeController1.text,
-        _dateController2.text +" "+ _timeController2.text,
+        _dateController1.text = formatter.format(selectedDate1) +" "+ _timeController1.text,
+        _dateController2.text = formatter.format(selectedDate2) +" "+ _timeController2.text,
         _jumlahpesertaController.text,
         _catatanController.text);
   }
@@ -190,10 +191,12 @@ class _PageAddBookingState extends State<PageAddBooking> {
       child: Text("Continue"),
       onPressed:  () async {
         postBook();
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context){
-              return PageNavBottomBar();
-            }));
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    PageNavBottomBar()),
+                (Route<dynamic> route) => false);
       },
     );
 
@@ -203,8 +206,8 @@ class _PageAddBookingState extends State<PageAddBooking> {
       content: Text(
           "Judul Meeting" "  : " "${_judulController.text}\n"
               "Ruang Meeting" "  : " "$dropdownRuang\n"
-              "Mulai Meeting" " : " "${_dateController1.text = formatter.format(selectedDate1)} " " ${_timeController1.text}\n"
-              "Selesai Meeting" "  : " "${_dateController2.text = formatter.format(selectedDate2)} " " ${_timeController2.text}\n"
+              "Mulai Meeting" " : " "${_dateController1.text = formatAd.format(selectedDate1)}, " "Jam ${_timeController1.text}\n"
+              "Selesai Meeting" "  : " "${_dateController2.text = formatAd.format(selectedDate2)}, " "Jam ${_timeController2.text}\n"
               "Jumlah Peserta Meeting" "  : " "${_jumlahpesertaController.text}\n"
               "Catatan Meeting" "  : " "${_catatanController.text}\n"),
       actions: [
@@ -303,7 +306,7 @@ class _PageAddBookingState extends State<PageAddBooking> {
                             });
                           },
                           hint: Text("Pilih Ruang Meeting"),
-                          items: <String>['1', '2', '3']
+                          items: <String>['1', '2', '1 & 2']
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,

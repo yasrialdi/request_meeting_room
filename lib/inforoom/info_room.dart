@@ -47,41 +47,64 @@ class _PageInfoRoomState extends State<PageInfoRoom> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,),
-      body: SingleChildScrollView(
-        child: Container(
-          child: InkWell(onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => PageDetailRoom()));
-          },
-
-            child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: listRoom.length,
-                itemBuilder: (BuildContext context, index) {
-                  return Container(
-
-                    child: Card(
-                      child: Column(
-                        children: [
-                          Image.network('${listRoom[index].foto_room}'),
-                          SizedBox(height: 8),
-                          Text(
-                            '${listRoom[index].ruang_meeting}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'ubuntu',
-                              color: Colors.black,
-                            ),
+      body: Container(
+        child: ListView.builder(
+            itemCount: listRoom.length,
+            itemBuilder: (BuildContext context, index) {
+              return GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => PageDetailRoom()));
+                },
+                child: Container(
+                  width: 400,
+                  margin: EdgeInsets.all(20),
+                  height: 250,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network('${listRoom[index].foto_room}',
+                            fit: BoxFit.fill),
                           ),
-                          SizedBox(height: 8)
-                        ],
                       ),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black.withOpacity(0.8),
+                                Colors.transparent,
+                              ]
+                            )
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 10,
+                        bottom: 5,
+                        child: Text(
+                          '${listRoom[index].ruang_meeting}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'ubuntu',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                     ),
-                  );
-                }),
-          ),
-        ),
+                ),
+              );
+            }),
       ),
     );
   }

@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:request_meeting_room/Admin/nav_bottom_bar.dart';
+import 'package:request_meeting_room/User/nav_bottom_bar.dart';
 import 'package:request_meeting_room/account/akun.dart';
-import 'package:request_meeting_room/firstpage/RepositoryLogin.dart';
 import 'package:request_meeting_room/firstpage/login_register.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:request_meeting_room/model/Repository.dart';
-import 'package:flutter_session/flutter_session.dart';
+import 'package:request_meeting_room/home/home.dart';
+import 'package:request_meeting_room/Admin/listbooking/list_booking.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:get/get.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +29,8 @@ class PageLogin extends StatefulWidget {
 class _PageLoginState extends State<PageLogin> {
   final formKey = GlobalKey<FormState>();
 
+  late String nama, username, email, password, divisi, level;
+  String alert = "Siap Login";
 
   TextEditingController usernamectrl = TextEditingController();
   TextEditingController passwordctrl = TextEditingController();
@@ -38,60 +40,93 @@ class _PageLoginState extends State<PageLogin> {
   final LogUrl = 'https://empkp.000webhostapp.com/app/login.php';
 
 
+  void loginProcess() async {
 
+    if(formKey.currentState!.validate()){
+      // 10.0.2.2 is ip address from android studio's emulator
 
-  Future login(String username, String password) async{
-    try {
       final response = await http.post(Uri.parse(LogUrl), body: {
-        "username": username,
-        "password": password,
-
+        "username" : usernamectrl.text,
+        "password" : passwordctrl.text
       });
-      var data = json.decode(response.body);
-      if(data == "true"){
+
+      var dataUser = json.decode(response.body);
+
+      if(dataUser.length < 1){
+        // if data user is empty or 0
+        setState(() {
+          Fluttertoast.showToast(
+              msg: "Cek Kembali Akun Anda",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 3,
+              backgroundColor: Colors.white,
+              textColor: Colors.black,
+              fontSize: 16
+          );
+        });
+      }else{
+        setState(() {
+          nama = dataUser[0]["nama"];
+          username = dataUser[0]["username"];
+          email = dataUser[0]["email"];
+          divisi = dataUser[0]["divisi"];
+          password = dataUser[0]["password"];
+          level = dataUser[0]["level"];
+        });
 
         SharedPreferences preferences = await SharedPreferences.getInstance();
-        preferences.setString('email', usernamectrl.text);
+        preferences.setString('nama', nama.toString());
+        preferences.setString('username', usernamectrl.text);
+        preferences.setString('email', email.toString());
+        preferences.setString('divisi', divisi.toString());
+        preferences.setString('level', level.toString());
 
-        Fluttertoast.showToast(
-            msg: "Login Succes",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 3,
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
-            fontSize: 16
-        );
-
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('username', usernamectrl.text);
-
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (_) => PageNavBottomBar()));
-
-
-      }else{
-        Fluttertoast.showToast(
-            msg: "Username & Password Salah",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 3,
-            backgroundColor: Colors.white,
-            textColor: Colors.black,
-            fontSize: 16
-        );
+        // move the page according to user status
+        if(level == "administrator"){
+          // use navigator push replacement so that user can not go back to login page
+          Fluttertoast.showToast(
+              msg: "Login Berhasil Sebagai Admin",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 3,
+              backgroundColor: Colors.white,
+              textColor: Colors.black,
+              fontSize: 16
+          );
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      PageNavBottomBarAdmin()),
+                  (Route<dynamic> route) => false);
+        }else{
+          Fluttertoast.showToast(
+              msg: "Login Berhasil Sebagai User",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 3,
+              backgroundColor: Colors.white,
+              textColor: Colors.black,
+              fontSize: 16
+          );
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      PageNavBottomBarUser()),
+                  (Route<dynamic> route) => false);
+        }
       }
-    } catch (e) {
-      print(e.toString());
     }
   }
 
-  void postLog() async{
-    bool response = await login(
-        usernamectrl.text,
-        passwordctrl.text);
-  }
-
+  // void postLog() async{
+  //   bool response = await login(
+  //       usernamectrl.text,
+  //       passwordctrl.text);
+  // }
+  //
   bool isLoading = false;
 
 
@@ -130,6 +165,7 @@ class _PageLoginState extends State<PageLogin> {
                   SizedBox(height: 80),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
+                    width: 400,
                     height: 45,
                     child: TextFormField(
                       controller: usernamectrl,
@@ -161,6 +197,7 @@ class _PageLoginState extends State<PageLogin> {
                   SizedBox(height: 10),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
+                    width: 400,
                     height: 45,
                     child: TextFormField(
                       controller: passwordctrl,
@@ -207,6 +244,7 @@ class _PageLoginState extends State<PageLogin> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: MaterialButton(
+
                       onPressed: () async {
                         if(formKey.currentState!.validate()){
                           setState(() {
@@ -216,13 +254,14 @@ class _PageLoginState extends State<PageLogin> {
                           setState(() {
                             isLoading = false;
                           });
-                          postLog();
+                          loginProcess();
                         }
 
                       },
                       color: Color(0xff2484DF),
+
                       height: 45,
-                      minWidth: MediaQuery.of(context).size.width,
+                      minWidth: 360,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -236,15 +275,15 @@ class _PageLoginState extends State<PageLogin> {
                           )
                       )
                           : const Text(
-                          'Masuk',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Ubuntu',
-                              color: Colors.white),
-                        ),
+                        'Masuk',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Ubuntu',
+                            color: Colors.white),
                       ),
                     ),
+                  ),
                   SizedBox(height: 80),
                   Image.asset(
                     'images/logo.png',

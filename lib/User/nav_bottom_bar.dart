@@ -4,23 +4,24 @@ import 'package:request_meeting_room/account/akun.dart';
 import 'package:request_meeting_room/addbooking/add_booking.dart';
 import 'package:request_meeting_room/home/home.dart';
 import 'package:request_meeting_room/inforoom/info_room.dart';
-import 'package:request_meeting_room/Admin/listbooking/list_booking.dart';
+import 'package:request_meeting_room/User/listbooking/list_booking.dart';
 
-class PageNavBottomBar extends StatefulWidget {
-  const PageNavBottomBar({Key? key}) : super(key: key);
+class PageNavBottomBarUser extends StatefulWidget {
+
+  const PageNavBottomBarUser({Key? key}) : super(key: key);
 
   @override
-  _PageNavBottomBarState createState() => _PageNavBottomBarState();
+  _PageNavBottomBarUserState createState() => _PageNavBottomBarUserState();
 }
 
-class _PageNavBottomBarState extends State<PageNavBottomBar> {
+class _PageNavBottomBarUserState extends State<PageNavBottomBarUser> {
   int page = 0;
 
   @override
   // TODO: implement widget
-  PageNavBottomBar get widget => super.widget;
+  PageNavBottomBarUser get widget => super.widget;
 
-  final List<Widget> _listPage = [PageHome(),PageListBookingAdmin(),PageInfoRoom(),PageProfil()];
+  final List<Widget> _listPage = [PageHome(),PageListBookingUser(),PageInfoRoom(), PageProfil()];
 
 
 

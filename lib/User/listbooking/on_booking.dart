@@ -1,34 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:request_meeting_room/addbooking/add_booking.dart';
+import 'package:request_meeting_room/addbooking/edit_booking.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:request_meeting_room/home/model_home.dart';
 import 'package:request_meeting_room/home/repository_home.dart';
-
+import 'dart:async';
 import 'list_booking.dart';
 
-class PageHistoryBooking extends StatefulWidget {
-  const PageHistoryBooking(TabController? tabcontroll, {Key? key}) : super(key: key);
-
+class PageOnBookingUser extends StatefulWidget {
+  const PageOnBookingUser(TabController? tabcontroll, {Key? key}) : super(key: key);
   @override
-  _PageHistoryBookingState createState() => _PageHistoryBookingState();
+  _PageOnBookingUserState createState() => _PageOnBookingUserState();
 }
 
-class _PageHistoryBookingState extends State<PageHistoryBooking> {
-
+class _PageOnBookingUserState extends State<PageOnBookingUser> {
   List<DataHome> listHome = [];
   RepositoryHome repository = RepositoryHome();
-
-  getDataHistory() async{
-    listHome = await repository.getDataBookingHistory();
+  getDataHome() async {
+    listHome = await repository.getDataHome();
     setState(() {});
   }
 
-  @override
-  void initState() {
-    getDataHistory();
-    super.initState();
-  }
-
-  void _showDialogHistoryBooking(DataHome dataHome) {
+  void _showDialogBooking(DataHome dataHome) {
     showDialog(
       context: context,
       builder: (_) {
@@ -40,13 +33,24 @@ class _PageHistoryBookingState extends State<PageHistoryBooking> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                      "Judul Meeting" "  : " "${dataHome.judul}\n"
-                          "Ruang Meeting" " : " "${dataHome.ruang}\n"
-                          "Mulai Meeting" "  : " "${dataHome.mulai} WIB\n"
-                          "Selesai Meeting" " : " "${dataHome.selesai} WIB\n"
-                          "Jumlah Peserta Meeting" " : ""${dataHome.jml_peserta}\n"
-                          "Catatan Meeting" " : " "${dataHome.catatan}\n")
+                  Text("Judul Meeting"
+                      "  : "
+                      "${dataHome.judul}\n"
+                      "Ruang Meeting"
+                      " : "
+                      "${dataHome.ruang}\n"
+                      "Mulai Meeting"
+                      "  : "
+                      "${dataHome.mulai} WIB\n"
+                      "Selesai Meeting"
+                      " : "
+                      "${dataHome.selesai} WIB\n"
+                      "Jumlah Peserta Meeting"
+                      " : "
+                      "${dataHome.jml_peserta}\n"
+                      "Catatan Meeting"
+                      " : "
+                      "${dataHome.catatan}\n")
                 ],
               ),
             ),
@@ -62,6 +66,67 @@ class _PageHistoryBookingState extends State<PageHistoryBooking> {
         );
       },
     );
+  }
+
+  edit(DataHome dataHome) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PageEditBooking(
+          id: dataHome.id,
+          judul: dataHome.judul,
+          ruang: dataHome.ruang,
+          mulai: dataHome.mulai,
+          selesai: dataHome.selesai,
+          jumlahpst: dataHome.jml_peserta,
+          catatan: dataHome.catatan,
+        ),
+      ),
+    );
+  }
+
+  _showAlertDialogDelete(DataHome dataHome) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continue"),
+      onPressed: () async {
+        bool response = await repository.deletebooking('${dataHome.id}');
+        if (response != '0') {
+          Navigator.of(context).pop();
+        } else {
+          print('Delete data failed');
+        }
+        getDataHome();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("AlertDialog"),
+      content: Text("Apakah yakin untuk menghapus data booking ?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    getDataHome();
+    super.initState();
   }
 
   @override
@@ -106,7 +171,7 @@ class _PageHistoryBookingState extends State<PageHistoryBooking> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${listHome[index].ruang}',
+                                    'Ruang Meeting ${listHome[index].ruang}',
                                     style: TextStyle(
                                       fontSize: 17,
                                       fontFamily: 'Ubuntu',
@@ -145,7 +210,7 @@ class _PageHistoryBookingState extends State<PageHistoryBooking> {
                                     children: [
                                       MaterialButton(
                                         onPressed: () {
-                                          _showDialogHistoryBooking(listHome[index]);
+                                          _showDialogBooking(listHome[index]);
                                         },
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -164,6 +229,49 @@ class _PageHistoryBookingState extends State<PageHistoryBooking> {
                                         color: Color(0xff2484DF),
                                       ),
                                       SizedBox(width: 10),
+                                      // MaterialButton(
+                                      //   onPressed: () {
+                                      //     edit(listHome[index]);
+                                      //   },
+                                      //   shape: RoundedRectangleBorder(
+                                      //     borderRadius:
+                                      //     BorderRadius.circular(5),
+                                      //   ),
+                                      //   height: 15,
+                                      //   minWidth: 30,
+                                      //   child: Text(
+                                      //     'Update',
+                                      //     style: TextStyle(
+                                      //         fontSize: 10,
+                                      //         fontWeight: FontWeight.bold,
+                                      //         fontFamily: 'Ubuntu',
+                                      //         color: Colors.white),
+                                      //   ),
+                                      //   color: Color(0xff2484DF),
+                                      // ),
+                                      // SizedBox(width: 10),
+                                      // MaterialButton(
+                                      //   onPressed: () async {
+                                      //     _showAlertDialogDelete(
+                                      //         listHome[index]);
+                                      //   },
+                                      //   shape: RoundedRectangleBorder(
+                                      //     borderRadius:
+                                      //     BorderRadius.circular(5),
+                                      //   ),
+                                      //   height: 15,
+                                      //   minWidth: 30,
+                                      //   child: Text(
+                                      //     'Hapus',
+                                      //     style: TextStyle(
+                                      //         fontSize: 10,
+                                      //         fontWeight: FontWeight.bold,
+                                      //         fontFamily: 'Ubuntu',
+                                      //         color: Colors.white),
+                                      //   ),
+                                      //   color: Colors.red,
+                                      // ),
+                                      SizedBox(height: 10),
                                     ],
                                   ),
                                 ],

@@ -124,6 +124,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                     SizedBox(height: 80),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
+                      width: 400,
                       height: 45,
                       child: TextFormField(
                         controller: _nama,
@@ -156,6 +157,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                     SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
+                      width: 400,
                       height: 45,
                       child: TextFormField(
                         controller: _username,
@@ -188,6 +190,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                     SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
+                      width: 400,
                       height: 45,
                       child: TextFormField(
                         controller: _email,
@@ -221,6 +224,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                     SizedBox(height: 10),
                     Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
+                        width: 400,
                         height: 55,
                         child: Row(
                           children: [
@@ -264,6 +268,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                     SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
+                      width: 400,
                       height: 45,
                       child: TextFormField(
                         controller: _password,
@@ -310,52 +315,6 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                     SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
-                      height: 45,
-                      child: TextFormField(
-                        controller: _repassword,
-                        obscureText: _rehide,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                          hintText: 'ulangi password',
-                          hintStyle: TextStyle(fontSize: 13,
-                              fontFamily: 'Ubuntu'),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(
-                              color: Color(0xffBFBFBF),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(
-                              color: Colors.black.withOpacity(0.6),
-                              width: 1,
-                            ),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _rehide ? Icons.visibility_off : Icons.visibility,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _rehide = !_rehide;
-                              });
-                            },
-                          ),
-                        ),
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return 'Ulangi Password Kosong';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
                       child: MaterialButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
@@ -365,10 +324,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                         },
                         color: Color(0xff2484DF),
                         height: 45,
-                        minWidth: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        minWidth: 360,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),

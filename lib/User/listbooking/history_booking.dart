@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:request_meeting_room/addbooking/add_booking.dart';
-import 'package:request_meeting_room/addbooking/edit_booking.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:request_meeting_room/home/model_home.dart';
 import 'package:request_meeting_room/home/repository_home.dart';
-import 'dart:async';
+
 import 'list_booking.dart';
 
-class PageOnBooking extends StatefulWidget {
-  const PageOnBooking(TabController? tabcontroll, {Key? key}) : super(key: key);
+class PageHistoryBookingUser extends StatefulWidget {
+  const PageHistoryBookingUser(TabController? tabcontroll, {Key? key}) : super(key: key);
+
   @override
-  _PageOnBookingState createState() => _PageOnBookingState();
+  _PageHistoryBookingUserState createState() => _PageHistoryBookingUserState();
 }
 
-class _PageOnBookingState extends State<PageOnBooking> {
+class _PageHistoryBookingUserState extends State<PageHistoryBookingUser> {
+
   List<DataHome> listHome = [];
   RepositoryHome repository = RepositoryHome();
-  getDataHome() async {
-    listHome = await repository.getDataHome();
+
+  getDataHistory() async{
+    listHome = await repository.getDataBookingHistory();
     setState(() {});
   }
 
-  void _showDialogBooking(DataHome dataHome) {
+  @override
+  void initState() {
+    getDataHistory();
+    super.initState();
+  }
+
+  void _showDialogHistoryBooking(DataHome dataHome) {
     showDialog(
       context: context,
       builder: (_) {
@@ -33,24 +40,13 @@ class _PageOnBookingState extends State<PageOnBooking> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Judul Meeting"
-                      "  : "
-                      "${dataHome.judul}\n"
-                      "Ruang Meeting"
-                      " : "
-                      "${dataHome.ruang}\n"
-                      "Mulai Meeting"
-                      "  : "
-                      "${dataHome.mulai} WIB\n"
-                      "Selesai Meeting"
-                      " : "
-                      "${dataHome.selesai} WIB\n"
-                      "Jumlah Peserta Meeting"
-                      " : "
-                      "${dataHome.jml_peserta}\n"
-                      "Catatan Meeting"
-                      " : "
-                      "${dataHome.catatan}\n")
+                  Text(
+                      "Judul Meeting" "  : " "${dataHome.judul}\n"
+                          "Ruang Meeting" " : " "${dataHome.ruang}\n"
+                          "Mulai Meeting" "  : " "${dataHome.mulai} WIB\n"
+                          "Selesai Meeting" " : " "${dataHome.selesai} WIB\n"
+                          "Jumlah Peserta Meeting" " : ""${dataHome.jml_peserta}\n"
+                          "Catatan Meeting" " : " "${dataHome.catatan}\n")
                 ],
               ),
             ),
@@ -66,67 +62,6 @@ class _PageOnBookingState extends State<PageOnBooking> {
         );
       },
     );
-  }
-
-  edit(DataHome dataHome) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PageEditBooking(
-          id: dataHome.id,
-          judul: dataHome.judul,
-          ruang: dataHome.ruang,
-          mulai: dataHome.mulai,
-          selesai: dataHome.selesai,
-          jumlahpst: dataHome.jml_peserta,
-          catatan: dataHome.catatan,
-        ),
-      ),
-    );
-  }
-
-  _showAlertDialogDelete(DataHome dataHome) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: Text("Cancel"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = TextButton(
-      child: Text("Continue"),
-      onPressed: () async {
-        bool response = await repository.deletebooking('${dataHome.id}');
-        if (response != '0') {
-          Navigator.of(context).pop();
-        } else {
-          print('Delete data failed');
-        }
-        getDataHome();
-      },
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
-      content: Text("Apakah yakin untuk menghapus data booking ?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    getDataHome();
-    super.initState();
   }
 
   @override
@@ -171,7 +106,7 @@ class _PageOnBookingState extends State<PageOnBooking> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Ruang Meeting ${listHome[index].ruang}',
+                                    '${listHome[index].ruang}',
                                     style: TextStyle(
                                       fontSize: 17,
                                       fontFamily: 'Ubuntu',
@@ -210,7 +145,7 @@ class _PageOnBookingState extends State<PageOnBooking> {
                                     children: [
                                       MaterialButton(
                                         onPressed: () {
-                                          _showDialogBooking(listHome[index]);
+                                          _showDialogHistoryBooking(listHome[index]);
                                         },
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -229,49 +164,6 @@ class _PageOnBookingState extends State<PageOnBooking> {
                                         color: Color(0xff2484DF),
                                       ),
                                       SizedBox(width: 10),
-                                      MaterialButton(
-                                        onPressed: () {
-                                          edit(listHome[index]);
-                                        },
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(5),
-                                        ),
-                                        height: 15,
-                                        minWidth: 30,
-                                        child: Text(
-                                          'Update',
-                                          style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Ubuntu',
-                                              color: Colors.white),
-                                        ),
-                                        color: Color(0xff2484DF),
-                                      ),
-                                      SizedBox(width: 10),
-                                      MaterialButton(
-                                        onPressed: () async {
-                                          _showAlertDialogDelete(
-                                              listHome[index]);
-                                        },
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(5),
-                                        ),
-                                        height: 15,
-                                        minWidth: 30,
-                                        child: Text(
-                                          'Hapus',
-                                          style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Ubuntu',
-                                              color: Colors.white),
-                                        ),
-                                        color: Colors.red,
-                                      ),
-                                      SizedBox(height: 10),
                                     ],
                                   ),
                                 ],

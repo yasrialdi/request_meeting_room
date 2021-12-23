@@ -41,12 +41,14 @@ class _PageEditBookingState extends State<PageEditBooking> {
 
   late DateTime selectedDate1;
   late DateTime selectedDate2;
+  late DateTime selectedDate3;
   late TimeOfDay selectedTime1;
   late TimeOfDay selectedTime2;
   late String _hour1, _minute1, _time1;
   late String _hour2, _minute2, _time2;
 
-  DateFormat formatter = DateFormat('yyyy-MM-dd');
+  DateFormat formatter = DateFormat('EEEE, d MMMM y ','id_ID');
+  DateFormat formatUp = DateFormat('yyyy-MM-dd');
 
   RepositoryAdd repository = RepositoryAdd();
   RepositoryHome reposi = RepositoryHome();
@@ -146,6 +148,7 @@ class _PageEditBookingState extends State<PageEditBooking> {
             backgroundColor: Colors.white,
             textColor: Colors.black,
             fontSize: 16);
+        
       } else {
         Fluttertoast.showToast(
             msg: "Data Booking Tidak Berhasil Diubah\n"
@@ -167,19 +170,20 @@ class _PageEditBookingState extends State<PageEditBooking> {
         widget.id.toString(),
         _judulController.text,
         dropdownRuang,
-        _dateController1.text + " " + _timeController1.text,
-        _dateController2.text + " " + _timeController2.text,
+        _dateController1.text = formatUp.format(selectedDate1) + " " + _timeController1.text,
+        _dateController2.text = formatUp.format(selectedDate2) + " " + _timeController2.text,
         _jumlahpesertaController.text,
         _catatanController.text);
   }
 
   @override
   void initState() {
-    DateTime startedAt = DateFormat('EEEE, d MMMM y HH:mm').parse(widget.mulai);
-    DateTime endedAt = DateFormat('EEEE, d MMMM y HH:mm').parse(widget.selesai);
+    DateTime startedAt = DateFormat('EEEE, d MMMM y HH:mm','id_ID').parse(widget.mulai);
+    DateTime endedAt = DateFormat('EEEE, d MMMM y HH:mm','id_ID').parse(widget.selesai);
 
     selectedDate1 = startedAt;
     selectedDate2 = endedAt;
+
     selectedTime1 = TimeOfDay(hour: startedAt.hour, minute: startedAt.minute);
     selectedTime2 = TimeOfDay(hour: endedAt.hour, minute: endedAt.minute);
 
@@ -211,10 +215,12 @@ class _PageEditBookingState extends State<PageEditBooking> {
       child: Text("Continue"),
       onPressed: () async {
         postBookEdit();
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) {
-              return PageNavBottomBar();
-            }));
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    PageNavBottomBar()),
+                (Route<dynamic> route) => false);
       },
     );
 
@@ -229,12 +235,12 @@ class _PageEditBookingState extends State<PageEditBooking> {
           "$dropdownRuang\n"
           "Mulai Meeting"
           " : "
-          "${_dateController1.text = formatter.format(selectedDate1)} "
-          " ${_timeController1.text}\n"
+          "${_dateController1.text = formatter.format(selectedDate1)}, "
+          "Jam ${_timeController1.text}\n"
           "Selesai Meeting"
           "  : "
-          "${_dateController2.text = formatter.format(selectedDate2)} "
-          " ${_timeController2.text}\n"
+          "${_dateController2.text = formatter.format(selectedDate2)}, "
+          "Jam ${_timeController2.text}\n"
           "Jumlah Peserta Meeting"
           "  : "
           "${_jumlahpesertaController.text}\n"
@@ -347,7 +353,7 @@ class _PageEditBookingState extends State<PageEditBooking> {
                               });
                             },
                             hint: Text("Pilih Ruang Meeting"),
-                            items: <String>['1', '2', '3']
+                            items: <String>['1', '2', '1 & 2']
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,

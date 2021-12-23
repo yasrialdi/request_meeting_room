@@ -61,10 +61,10 @@ class DataHome {
         judul: item['judul_meeting'],
         ruang: item['ruang_meeting'],
         mulai: item['mulai'] != null
-            ? DateFormat('EEEE, d MMMM y HH:mm').format(parsedMulai)
+            ? DateFormat('EEEE, d MMMM y HH:mm','id_ID').format(parsedMulai)
             : "",
         selesai: item['selesai'] != null
-            ? DateFormat('EEEE, d MMMM y HH:mm').format(parsedSelesai)
+            ? DateFormat('EEEE, d MMMM y HH:mm','id_ID').format(parsedSelesai)
             : "",
         jml_peserta: item['jumlah_peserta'],
         catatan: item['catatan'],

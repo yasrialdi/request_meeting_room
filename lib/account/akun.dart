@@ -27,12 +27,20 @@ class _PageProfilState extends State<PageProfil> {
     });
   }
 
+  String nama = "";
+  String username = "";
   String email = "";
+  String divisi = "";
+  String level = "";
 
   Future getEmail() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
+      username = preferences.getString('username');
+      nama = preferences.getString('nama');
       email = preferences.getString('email');
+      divisi = preferences.getString('divisi');
+      level = preferences.getString('level');
     });
   }
 
@@ -47,8 +55,12 @@ class _PageProfilState extends State<PageProfil> {
         backgroundColor: Colors.amber,
         textColor: Colors.white,
         fontSize: 16.0);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => PageLogin()));
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                PageLogin()),
+            (Route<dynamic> route) => false);
   }
 
   @override
@@ -105,7 +117,7 @@ class _PageProfilState extends State<PageProfil> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        email,
+                        username,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -148,9 +160,10 @@ class _PageProfilState extends State<PageProfil> {
                           Text(
                             'Detail',
                             style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
                               color: Colors.black,
+
                             ),
                           ),
                           InkWell(
@@ -189,11 +202,12 @@ class _PageProfilState extends State<PageProfil> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(height: 15),
-                                  Text('Nama    : ${listAkun[index].nama}\n'
-                                      'Email     : ${listAkun[index].email}\n'
-                                      'Divisi     : ${listAkun[index].divisi}\n'
-                                      'Level      : ${listAkun[index].level}'),
+                                  Text('Nama    : ${nama}\n'
+                                      'Email     : ${email}\n'
+                                      'Divisi     : ${divisi}\n'
+                                      'Level      : ${level}'
+                                    ),
+                                  SizedBox(height: 15)
                                 ],
                               ),
                             );
@@ -221,8 +235,9 @@ class _PageProfilState extends State<PageProfil> {
                       title: Text(
                         'Logout',
                         style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 16,
                             fontFamily: 'Ubuntu',
+                            fontWeight: FontWeight.w200,
                             color: Colors.black),
                       ),
                     ),
@@ -241,13 +256,6 @@ class _PageProfilState extends State<PageProfil> {
           ],
         ),
       ),
-    );
-  }
-
-  PreferredSize _emptyAppBar() {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(40.0),
-      child: AppBar(backgroundColor: Colors.white),
     );
   }
 }
