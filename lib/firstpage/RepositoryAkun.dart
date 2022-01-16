@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'package:intl/intl.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:request_meeting_room/firstpage/Model_Akun.dart';
 
 class RepositoryAkun {
-  final baseUrl = 'https://empkp.000webhostapp.com/app/datagetlogin.php';
+  final baseUrl = 'http://123.231.163.70:3530/app/datagetlogin.php';
 
   Future getDataAkun() async {
     try {

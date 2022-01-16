@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:request_meeting_room/account/akun.dart';
+import 'package:request_meeting_room/Admin/account/akun.dart';
+import 'package:request_meeting_room/Admin/info_room/info_room_admin.dart';
 import 'package:request_meeting_room/addbooking/add_booking.dart';
 import 'package:request_meeting_room/home/home.dart';
+import 'package:request_meeting_room/home/home2.dart';
 import 'package:request_meeting_room/inforoom/info_room.dart';
 import 'package:request_meeting_room/Admin/listbooking/list_booking_admin.dart';
 
@@ -20,7 +21,7 @@ class _PageNavBottomBarAdminState extends State<PageNavBottomBarAdmin> {
   // TODO: implement widget
   PageNavBottomBarAdmin get widget => super.widget;
 
-  final List<Widget> _listPage = [PageHome(),PageListBookingAdmin(),PageInfoRoom(),PageProfil()];
+  final List<Widget> _listPage = [PageHome(),PageListBookingAdmin(),PageInfoRoomAkunAdmin(),PageProfilAdmin()];
 
 
 

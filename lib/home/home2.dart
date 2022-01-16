@@ -8,18 +8,14 @@ import 'package:request_meeting_room/home/repository_home.dart';
 import 'package:request_meeting_room/home/model_home.dart';
 import 'package:intl/intl.dart';
 
-late String cekDate, cekMeeting;
-
-class PageHome extends StatefulWidget {
-  const PageHome({Key? key}) : super(key: key);
+class PageHome2 extends StatefulWidget {
+  const PageHome2({Key? key}) : super(key: key);
 
   @override
-  _PageHomeState createState() => _PageHomeState();
+  _PageHome2State createState() => _PageHome2State();
 }
 
-
-
-class _PageHomeState extends State<PageHome> {
+class _PageHome2State extends State<PageHome2> {
   List<DataHome> listHome = [];
   RepositoryHome repository = RepositoryHome();
 
@@ -123,7 +119,6 @@ class _PageHomeState extends State<PageHome> {
     );
   }
 
-
   @override
   void initState() {
     getDataHome();
@@ -163,9 +158,11 @@ class _PageHomeState extends State<PageHome> {
                       dataSource: MeetingDataSource(snapshot.data!),
                       initialSelectedDate: DateTime.now(),
                       onTap: (details) async{
+                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                        preferences.setString('nama', _getDataSource().toString());
                         showModalBottomSheet(
                             context: context,
-                            builder: (context) => LongPress());
+                            builder: (context) => PageKalender());
                       },
                     );
                   }
@@ -360,61 +357,118 @@ class Detail {
 }
 
 
-class LongPress extends StatefulWidget {
-  const LongPress({Key? key}) : super(key: key);
+class PageKalender extends StatefulWidget {
+  const PageKalender({Key? key}) : super(key: key);
 
   @override
-  _LongPressState createState() => _LongPressState();
+  _PageKalenderState createState() => _PageKalenderState();
 }
 
-class _LongPressState extends State<LongPress> {
+class _PageKalenderState extends State<PageKalender> {
 
-  List<DataHome> listHome = [];
-  RepositoryHome repository = RepositoryHome();
-
-  List<Meeting>get selectedDate => meetings;
-
-  get meetings => _getDataSelect();
-
-  getDataHome() async {
-    listHome = await repository.getDataHome();
-    setState(() {});
+  late String nama;
+  
+  Future getEmail() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      nama = preferences.getString('nama');
+    });
   }
 
-  Future<List<Meeting>> _getDataSelect() async {
-    List<DataHome> listHome = await repository.getDataHome();
-    List<Meeting> meetings = [];
+  showAlertDialog(BuildContext context) {
 
-    for (DataHome item in listHome) {
-      DateTime startTime = item.mulaiDateTime;
-      DateTime endTime = item.selesaiDateTime;
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () { },
+    );
 
-      meetings.add(
-        // Meeting("Conference", startTime, endTime, Color(0xFF0F8644), false),
-        Meeting(item.judul, item.ruang, startTime, endTime, Color(0xFF0F8644), false),
-      );
-    }
-    return meetings;
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("My title"),
+      content: Text('Nama    : ${nama}\n'
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Meeting>>(
-      future: _getDataSelect(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return SfCalendar(
-            view: CalendarView.timelineDay,
-            dataSource: MeetingDataSource(snapshot.data!),
-            monthViewSettings: MonthViewSettings(
-              appointmentDisplayMode:
-              MonthAppointmentDisplayMode.appointment,
-            ),
-          );
-        }
-        return Center(child: CircularProgressIndicator());
-      },
+    return Scaffold(
+      body: Container(
+        child: showAlertDialog(context),
+      ),
     );
-
   }
 }
+
+
+
+// class LongPress extends StatefulWidget {
+//   const LongPress({Key? key}) : super(key: key);
+//
+//   @override
+//   _LongPressState createState() => _LongPressState();
+// }
+//
+// class _LongPressState extends State<LongPress> {
+//
+//   List<DataHome> listHome = [];
+//   RepositoryHome repository = RepositoryHome();
+//
+//   List<Meeting>get selectedDate => meetings;
+//
+//   get meetings => _getDataSelect();
+//
+//   getDataHome() async {
+//     listHome = await repository.getDataHome();
+//     setState(() {});
+//   }
+//
+//   Future<List<Meeting>> _getDataSelect() async {
+//     List<DataHome> listHome = await repository.getDataHome();
+//     List<Meeting> meetings = [];
+//
+//     for (DataHome item in listHome) {
+//       DateTime startTime = item.mulaiDateTime;
+//       DateTime endTime = item.selesaiDateTime;
+//
+//       meetings.add(
+//         // Meeting("Conference", startTime, endTime, Color(0xFF0F8644), false),
+//         Meeting(item.judul, item.ruang, startTime, endTime, Color(0xFF0F8644), false),
+//       );
+//     }
+//     return meetings;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder<List<Meeting>>(
+//       future: _getDataSelect(),
+//       builder: (context, snapshot) {
+//         if (snapshot.hasData) {
+//           return SfCalendar(
+//             view: CalendarView.timelineDay,
+//             dataSource: MeetingDataSource(snapshot.data!),
+//             monthViewSettings: MonthViewSettings(
+//               appointmentDisplayMode:
+//               MonthAppointmentDisplayMode.appointment,
+//             ),
+//           );
+//         }
+//         return Center(child: CircularProgressIndicator());
+//       },
+//     );
+//
+//   }
+// }

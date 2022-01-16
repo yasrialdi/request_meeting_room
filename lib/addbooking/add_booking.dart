@@ -110,7 +110,7 @@ class _PageAddBookingState extends State<PageAddBooking> {
   }
 
 
-  final AddUrl = 'https://empkp.000webhostapp.com/app/adddatabooking1lagi.php';
+  final AddUrl = 'http://123.231.163.70:3530/app/adddatabooking1lagi.php';
 
   Future postDataAdd(
       String judul, String ruangan, String mulai, String selesai, String jumlah, String catatan) async {
@@ -124,7 +124,7 @@ class _PageAddBookingState extends State<PageAddBooking> {
         "jumlah_peserta": jumlah,
         "catatan": catatan,
       });
-      if (response.statusCode == 201) {
+      if (response != '0') {
         Fluttertoast.showToast(
             msg: "Data Booking Berhasil Ditambahkan",
             toastLength: Toast.LENGTH_SHORT,
@@ -149,17 +149,6 @@ class _PageAddBookingState extends State<PageAddBooking> {
     } catch (e) {
       print(e.toString());
     }
-  }
-
-
-  void postBook() async{
-    bool response = await postDataAdd(
-        _judulController.text,
-        dropdownRuang,
-        _dateController1.text = formatter.format(selectedDate1) +" "+ _timeController1.text,
-        _dateController2.text = formatter.format(selectedDate2) +" "+ _timeController2.text,
-        _jumlahpesertaController.text,
-        _catatanController.text);
   }
 
   @override
@@ -190,13 +179,15 @@ class _PageAddBookingState extends State<PageAddBooking> {
     Widget continueButton = TextButton(
       child: Text("Continue"),
       onPressed:  () async {
-        postBook();
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    PageNavBottomBar()),
-                (Route<dynamic> route) => false);
+        await postDataAdd(
+            _judulController.text,
+            dropdownRuang,
+            _dateController1.text = formatter.format(selectedDate1) +" "+ _timeController1.text,
+            _dateController2.text = formatter.format(selectedDate2) +" "+ _timeController2.text,
+            _jumlahpesertaController.text,
+            _catatanController.text);
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
 

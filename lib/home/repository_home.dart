@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:request_meeting_room/home/model_home.dart';
 
 class RepositoryHome {
-  final baseUrl = 'https://empkp.000webhostapp.com/app/datagetnew.php';
-  final UrlHistory = 'https://empkp.000webhostapp.com/app/datagethistory.php';
-  final UrlDeleteBooking = 'https://empkp.000webhostapp.com/app/deletedatabooking.php';
-  final UrlUpdateBooking = 'https://empkp.000webhostapp.com/app/updatedatabooking.php';
+  final baseUrl = 'http://123.231.163.70:3530/app/datagetnew.php';
+  final UrlHistory = 'http://123.231.163.70:3530/app/datagethistory.php';
+  final UrlDeleteBooking = 'http://123.231.163.70:3530/app/deletedatabooking.php';
+  final UrlUpdateBooking = 'http://123.231.163.70:3530/app/updatedatabooking.php';
 
   Future<List<DataHome>> getDataHome() async {
     List<DataHome> dataHome = [];

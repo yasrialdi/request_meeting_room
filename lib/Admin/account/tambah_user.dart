@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:request_meeting_room/Admin/account/list_user.dart';
 import 'package:request_meeting_room/firstpage/RepositoryLogin.dart';
+import 'package:request_meeting_room/Admin/account/list_user.dart';
 import 'package:request_meeting_room/firstpage/login.dart';
 
-class PageLoginRegister extends StatefulWidget {
-  const PageLoginRegister({Key? key}) : super(key: key);
+class PageTambahUser extends StatefulWidget {
+  const PageTambahUser({Key? key}) : super(key: key);
 
   @override
-  _PageLoginRegisterState createState() => _PageLoginRegisterState();
+  _PageTambahUserState createState() => _PageTambahUserState();
 }
 
-class _PageLoginRegisterState extends State<PageLoginRegister> {
+class _PageTambahUserState extends State<PageTambahUser> {
 
   final formKey = GlobalKey<FormState>();
 
-  bool isloading = false;
+
+
   bool _hide = true;
   bool _rehide = true;
 
@@ -21,14 +24,16 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
   final _nama = TextEditingController();
   final _username = TextEditingController();
   final _email = TextEditingController();
-  final _divisi = TextEditingController();
   final _password = TextEditingController();
-  final _repassword = TextEditingController();
+
 
   List<String> listDivisi = ["ICT", "Finance", "HRD"];
+  List<String> listLevel = ["user", "administrator"];
 
   String nDivisi = "ICT";
+  String nLevel = "user";
   int? nilaidivisi;
+  int? nilailevel;
 
   void pilihDivisi(String value) {
     setState(() {
@@ -36,8 +41,11 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
     });
   }
 
-
-
+  void pilihLevel(String value) {
+    setState(() {
+      nLevel = value;
+    });
+  }
   _showAlertDialogAdd() {
     // set up the buttons
     Widget cancelButton = TextButton(
@@ -49,14 +57,17 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
     Widget continueButton = TextButton(
       child: Text("Continue"),
       onPressed: () async {
-        await repository.postDataReg(
+
+        await repository.postDataTambah(
             _nama.text,
             _username.text,
             _email.text,
             nDivisi,
-            _password.text);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (_) => PageLogin()));
+            _password.text,
+            nLevel);
+
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
 
@@ -69,7 +80,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
               "Email" "          = " "${_email.text}\n"
               "Divisi" "           = " "$nDivisi\n"
               "Password" "   = " "${_password.text}\n"
-              "Level" "           = " "User"),
+              "Level" "           = " "${nLevel}"),
       actions: [
         cancelButton,
         continueButton,
@@ -91,8 +102,11 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
       return Scaffold(
         backgroundColor: Color(0xffDCE5F0),
         appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
           title: Text(
-            'Register',
+            'Add User',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -114,12 +128,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'images/logo.png',
-                      height: 150,
-                      width: 120,
-                    ),
-                    SizedBox(height: 80),
+                    SizedBox(height: 150),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       width: 400,
@@ -312,6 +321,50 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                     ),
                     SizedBox(height: 10),
                     Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        width: 400,
+                        height: 55,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: DropdownButtonFormField<String>(
+                                value: nLevel,
+                                onChanged: (String ? value) {
+                                  pilihLevel(value ?? "");
+                                  nilailevel = listLevel.indexOf(value ?? "");
+                                },
+                                items: listLevel.map(
+                                        (String value) {
+                                      return DropdownMenuItem( //tampilan isi data dropdown
+                                        child: Text(value),
+                                        value: value,
+                                      );
+                                    }
+                                ).toList(),
+                                decoration: InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  hintStyle: TextStyle(
+                                      fontSize: 8, fontFamily: 'Ubuntu'),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: BorderSide(color: Colors.grey),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: BorderSide(
+                                      color: Colors.black.withOpacity(0.6),
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                    SizedBox(height: 10),
+                    Container(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: MaterialButton(
                         onPressed: () {
@@ -327,7 +380,7 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: Text(
-                          'Daftar',
+                          'Simpan',
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -336,54 +389,8 @@ class _PageLoginRegisterState extends State<PageLoginRegister> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 80),
-                    Image.asset(
-                      'images/logo.png',
-                      height: 64,
-                      width: 81,
-                      color: Colors.transparent,
-                    ),
                   ],
                 ),
-              ),
-            ),
-            Positioned(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Divider(thickness: 0.5, color: Colors.grey),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Sudah punya akun?',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontFamily: 'Ubutu',
-                          color: Color(0xff808080),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'Masuk',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Ubuntu',
-                            color: Colors.black,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
               ),
             ),
           ],

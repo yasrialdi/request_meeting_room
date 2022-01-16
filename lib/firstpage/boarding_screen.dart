@@ -40,8 +40,8 @@ class _PageOnBoardingScreenState extends State<PageOnBoardingScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.network(
-                    'https://empkp.000webhostapp.com/app/launcher.png',
+                  Image.asset(
+                    'images/launcher.png',
                     height: 80,
                     width: 110,
                   ),
@@ -60,7 +60,7 @@ class _PageOnBoardingScreenState extends State<PageOnBoardingScreen> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage('https://empkp.000webhostapp.com/app/boar1.jpg'), fit: BoxFit.cover),
+                    image: AssetImage('images/boar1.jpg'), fit: BoxFit.cover),
               ),
             ),
             Container(
@@ -83,7 +83,7 @@ class _PageOnBoardingScreenState extends State<PageOnBoardingScreen> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage('https://empkp.000webhostapp.com/app/boar2.jpg'), fit: BoxFit.cover),
+                    image: AssetImage('images/boar2.jpg'), fit: BoxFit.cover),
               ),
             ),
             Container(
@@ -128,7 +128,7 @@ class _PageOnBoardingScreenState extends State<PageOnBoardingScreen> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage('https://empkp.000webhostapp.com/app/boar3.jpg'), fit: BoxFit.cover),
+                    image: AssetImage('images/boar3.jpg'), fit: BoxFit.cover),
               ),
             ),
             Container(

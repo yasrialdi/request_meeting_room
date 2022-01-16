@@ -5,6 +5,8 @@ import 'package:request_meeting_room/Admin/nav_bottom_bar_admin.dart';
 import 'package:request_meeting_room/User/nav_bottom_bar_user.dart';
 import 'package:request_meeting_room/firstpage/boarding_screen.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
+import 'package:request_meeting_room/home/model_home.dart';
+import 'package:request_meeting_room/home/repository_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late String cekLevel, cekEmail;
@@ -18,7 +20,12 @@ class PageSplashScreen extends StatefulWidget {
 
 class _PageSplashScreenState extends State<PageSplashScreen> {
 
-
+  List<DataHome> listHome = [];
+  RepositoryHome repository = RepositoryHome();
+  getDataHome() async {
+    listHome = await repository.getDataHome();
+    setState(() {});
+  }
 
   Future getEmail() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -36,12 +43,8 @@ class _PageSplashScreenState extends State<PageSplashScreen> {
     return Timer(duration, () {
 
       if(cekEmail == null){
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    PageOnBoardingScreen()),
-                (Route<dynamic> route) => false);
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => PageOnBoardingScreen()));
       }else{
         if(cekLevel == "administrator"){
           // use navigator push replacement so that user can not go back to login page
@@ -54,12 +57,9 @@ class _PageSplashScreenState extends State<PageSplashScreen> {
               textColor: Colors.black,
               fontSize: 16
           );
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      PageNavBottomBarAdmin()),
-                  (Route<dynamic> route) => false);
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => PageNavBottomBarAdmin()));
+          getDataHome();
         }else{
           Fluttertoast.showToast(
               msg: "Login Sebagai User",
@@ -70,12 +70,9 @@ class _PageSplashScreenState extends State<PageSplashScreen> {
               textColor: Colors.black,
               fontSize: 16
           );
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      PageNavBottomBarUser()),
-                  (Route<dynamic> route) => false);
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => PageNavBottomBarUser()));
+          getDataHome();
         }
       }
 
@@ -109,8 +106,8 @@ class _PageSplashScreenState extends State<PageSplashScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.network(
-                  'https://empkp.000webhostapp.com/app/logo.png',
+                Image.asset(
+                  'images/logo.png',
                   height: 150,
                   width: 200,
                 ),

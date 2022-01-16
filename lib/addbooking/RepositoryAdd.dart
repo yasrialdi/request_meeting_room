@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:request_meeting_room/model/model_info_room.dart';
 
 class RepositoryAdd {
-  final AddUrl = 'https://empkp.000webhostapp.com/app/adddatabooking1lagi.php';
+  final AddUrl = 'http://123.231.163.70:3530/app/adddatabooking1lagi.php';
 
   Future postDataAdd(
       String judul, String ruangan, String mulai, String selesai, String jumlah, String catatan) async {
@@ -21,7 +21,7 @@ class RepositoryAdd {
         "jumlah_peserta": jumlah,
         "catatan": catatan,
       });
-      if (response.statusCode == 201) {
+      if (response != '0') {
         Fluttertoast.showToast(
             msg: "Data Booking Berhasil Ditambahkan",
             toastLength: Toast.LENGTH_SHORT,

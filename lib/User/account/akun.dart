@@ -5,14 +5,14 @@ import 'package:request_meeting_room/firstpage/login.dart';
 import 'package:request_meeting_room/firstpage/Model_Akun.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PageProfil extends StatefulWidget {
-  const PageProfil({Key? key}) : super(key: key);
+class PageProfilUser extends StatefulWidget {
+  const PageProfilUser({Key? key}) : super(key: key);
 
   @override
-  _PageProfilState createState() => _PageProfilState();
+  _PageProfilUserState createState() => _PageProfilUserState();
 }
 
-class _PageProfilState extends State<PageProfil> {
+class _PageProfilUserState extends State<PageProfilUser> {
   bool visibility1 = true;
   bool visibility2 = false;
 
@@ -46,7 +46,11 @@ class _PageProfilState extends State<PageProfil> {
 
   Future logOut(BuildContext context) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.remove('nama');
+    preferences.remove('username');
     preferences.remove('email');
+    preferences.remove('divisi');
+    preferences.remove('level');
     Fluttertoast.showToast(
         msg: "Logout Successful",
         toastLength: Toast.LENGTH_SHORT,
@@ -111,8 +115,8 @@ class _PageProfilState extends State<PageProfil> {
                     children: [
                       CircleAvatar(
                         radius: 50,
-                        backgroundImage: NetworkImage(
-                            'https://empkp.000webhostapp.com/app/person.png'),
+                        backgroundImage: AssetImage(
+                            'images/person.png'),
                         // child:
                       ),
                       SizedBox(height: 10),
@@ -193,25 +197,19 @@ class _PageProfilState extends State<PageProfil> {
                     visible: visibility2,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 18, right: 9),
-                      child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: listAkun.length,
-                          itemBuilder: (BuildContext context, index) {
-                            return Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Nama    : ${nama}\n'
-                                      'Email     : ${email}\n'
-                                      'Divisi     : ${divisi}\n'
-                                      'Level      : ${level}'
-                                    ),
-                                  SizedBox(height: 15)
-                                ],
-                              ),
-                            );
-                          }),
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Nama    : ${nama}\n'
+                                'Email     : ${email}\n'
+                                'Divisi     : ${divisi}\n'
+                                'Level      : ${level}'
+                            ),
+                            SizedBox(height: 15)
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   Padding(

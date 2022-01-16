@@ -125,7 +125,7 @@ class _PageEditBookingState extends State<PageEditBooking> {
       });
   }
 
-  final AddUrl = 'https://empkp.000webhostapp.com/app/updatedatabooking1.php';
+  final AddUrl = 'http://123.231.163.70:3530/app/updatedatabooking1.php';
 
   Future postDataEdit(String id, String judul, String ruangan, String mulai,
       String selesai, String jumlah, String catatan) async {
@@ -139,7 +139,7 @@ class _PageEditBookingState extends State<PageEditBooking> {
         "jumlah_peserta": jumlah,
         "catatan": catatan,
       });
-      if (response.statusCode == 201) {
+      if (response != '0') {
         Fluttertoast.showToast(
             msg: "Data Booking Berhasil Diubah",
             toastLength: Toast.LENGTH_SHORT,
@@ -165,16 +165,7 @@ class _PageEditBookingState extends State<PageEditBooking> {
     }
   }
 
-  void postBookEdit() async {
-    bool response = await postDataEdit(
-        widget.id.toString(),
-        _judulController.text,
-        dropdownRuang,
-        _dateController1.text = formatUp.format(selectedDate1) + " " + _timeController1.text,
-        _dateController2.text = formatUp.format(selectedDate2) + " " + _timeController2.text,
-        _jumlahpesertaController.text,
-        _catatanController.text);
-  }
+
 
   @override
   void initState() {
@@ -214,13 +205,16 @@ class _PageEditBookingState extends State<PageEditBooking> {
     Widget continueButton = TextButton(
       child: Text("Continue"),
       onPressed: () async {
-        postBookEdit();
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    PageNavBottomBar()),
-                (Route<dynamic> route) => false);
+        await postDataEdit(
+            widget.id.toString(),
+            _judulController.text,
+            dropdownRuang,
+            _dateController1.text = formatUp.format(selectedDate1) + " " + _timeController1.text,
+            _dateController2.text = formatUp.format(selectedDate2) + " " + _timeController2.text,
+            _jumlahpesertaController.text,
+            _catatanController.text);
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
 

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:request_meeting_room/Admin/nav_bottom_bar_admin.dart';
 import 'package:request_meeting_room/User/nav_bottom_bar_user.dart';
-import 'package:request_meeting_room/account/akun.dart';
+import 'package:request_meeting_room/Admin/account/akun.dart';
 import 'package:request_meeting_room/firstpage/login_register.dart';
 import 'package:request_meeting_room/firstpage/nav_bottom_bar.dart';
 import 'package:http/http.dart' as http;
@@ -11,13 +11,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:request_meeting_room/home/home.dart';
 import 'package:request_meeting_room/Admin/listbooking/list_booking_admin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  var email = preferences.getString('email');
-  runApp(MaterialApp(home: email == null ? PageLogin() : PageProfil()));
-}
 
 class PageLogin extends StatefulWidget {
   const PageLogin({Key? key}) : super(key: key);
@@ -30,17 +23,15 @@ class _PageLoginState extends State<PageLogin> {
   final formKey = GlobalKey<FormState>();
 
   late String nama, username, email, password, divisi, level;
-  String alert = "Siap Login";
 
   TextEditingController usernamectrl = TextEditingController();
   TextEditingController passwordctrl = TextEditingController();
 
   bool _hide = true;
 
-  final LogUrl = 'https://empkp.000webhostapp.com/app/login.php';
+  final LogUrl = 'http://123.231.163.70:3530/app/login.php';
 
-
-  void loginProcess() async {
+  Future loginProcess() async {
 
     if(formKey.currentState!.validate()){
       // 10.0.2.2 is ip address from android studio's emulator
@@ -94,12 +85,8 @@ class _PageLoginState extends State<PageLogin> {
               textColor: Colors.black,
               fontSize: 16
           );
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      PageNavBottomBarAdmin()),
-                  (Route<dynamic> route) => false);
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => PageNavBottomBarAdmin()));
         }else{
           Fluttertoast.showToast(
               msg: "Login Berhasil Sebagai User",
@@ -110,12 +97,8 @@ class _PageLoginState extends State<PageLogin> {
               textColor: Colors.black,
               fontSize: 16
           );
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      PageNavBottomBarUser()),
-                  (Route<dynamic> route) => false);
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => PageNavBottomBarUser()));
         }
       }
     }
@@ -157,8 +140,8 @@ class _PageLoginState extends State<PageLogin> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.network(
-                    'https://empkp.000webhostapp.com/app/logo.png',
+                  Image.asset(
+                    'images/logo.png',
                     height: 150,
                     width: 120,
                   ),
@@ -250,11 +233,11 @@ class _PageLoginState extends State<PageLogin> {
                           setState(() {
                             isLoading = true;
                           });
-                          await Future.delayed(const Duration(seconds: 3));
+                          await loginProcess();
                           setState(() {
                             isLoading = false;
                           });
-                          loginProcess();
+
                         }
 
                       },

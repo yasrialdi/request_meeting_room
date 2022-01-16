@@ -39,7 +39,7 @@ class _PageDetailRoomState extends State<PageDetailRoom>
                 height: 200,
                 width: MediaQuery.of(context).size.width,
                 child: Image.asset(
-                  'images/boar1.jpg',
+                  'images/ruang4.jpg',
                   fit: BoxFit.cover,
                 ),
               ),

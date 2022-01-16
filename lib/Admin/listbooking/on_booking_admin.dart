@@ -21,6 +21,8 @@ class _PageOnBookingAdminState extends State<PageOnBookingAdmin> {
     setState(() {});
   }
 
+  bool isLoading = true;
+
   void _showDialogBooking(DataHome dataHome) {
     showDialog(
       context: context,
@@ -85,7 +87,7 @@ class _PageOnBookingAdminState extends State<PageOnBookingAdmin> {
     );
   }
 
-  _showAlertDialogDelete(DataHome dataHome) {
+  _showAlertDialogDeleteUser(DataHome dataHome) {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
@@ -145,7 +147,7 @@ class _PageOnBookingAdminState extends State<PageOnBookingAdmin> {
               shrinkWrap: true,
               itemCount: listHome.length,
               itemBuilder: (BuildContext context, index) {
-                return Container(
+                return  Container(
                   height: 135,
                   margin: EdgeInsets.only(bottom: 3),
                   child: Card(
@@ -252,7 +254,7 @@ class _PageOnBookingAdminState extends State<PageOnBookingAdmin> {
                                       SizedBox(width: 10),
                                       MaterialButton(
                                         onPressed: () async {
-                                          _showAlertDialogDelete(
+                                          _showAlertDialogDeleteUser(
                                               listHome[index]);
                                         },
                                         shape: RoundedRectangleBorder(
